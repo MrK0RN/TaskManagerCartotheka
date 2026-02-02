@@ -1,0 +1,312 @@
+/* Стили для компонентов */
+
+/* Компонент языков */
+.languages-component {
+    margin-top: 15px;
+}
+
+.language-item {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+}
+
+.language-row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr auto;
+    gap: 15px;
+    align-items: end;
+    margin-bottom: 10px;
+}
+
+.language-select-wrapper, .level-select-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.language-select-wrapper {
+    position: relative;
+}
+
+.language-search {
+    margin-top: 5px;
+    display: none;
+}
+
+.language-search.active {
+    display: block;
+}
+
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid var(--primary);
+    border-top: none;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.autocomplete-dropdown.active {
+    display: block;
+}
+
+.autocomplete-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.autocomplete-item:hover {
+    background: #f0f0f0;
+}
+
+.comment-wrapper {
+    margin-top: 10px;
+}
+
+.btn-remove-language, .btn-remove-education, .btn-remove-skill {
+    background: #dc3545;
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.btn-remove-language:hover, .btn-remove-education:hover, .btn-remove-skill:hover {
+    background: #c82333;
+    transform: scale(1.1);
+}
+
+.btn-add-language, .btn-add-education, .btn-add-skill {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-add-language:hover, .btn-add-education:hover, .btn-add-skill:hover {
+    background: #3db8d3;
+    transform: translateY(-2px);
+}
+
+/* Компонент образования */
+.education-component {
+    margin-top: 15px;
+}
+
+.education-item {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+}
+
+.education-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1.5fr auto;
+    gap: 15px;
+    align-items: end;
+    margin-bottom: 10px;
+}
+
+.education-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.date-from, .date-to {
+    display: flex;
+    flex-direction: column;
+}
+
+.year-input {
+    width: 100%;
+}
+
+.education-details {
+    margin-top: 10px;
+}
+
+/* Компонент навыков */
+.skills-component {
+    margin-top: 15px;
+}
+
+.skill-item {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+}
+
+.skill-row {
+    display: grid;
+    grid-template-columns: 1.5fr 2fr 1.5fr auto;
+    gap: 15px;
+    align-items: end;
+    margin-bottom: 10px;
+}
+
+.skill-comment-wrapper {
+    margin-top: 10px;
+}
+
+.skill-custom-input {
+    margin-top: 5px;
+}
+
+/* Структурированные поля */
+.structured-fields {
+    background: #f8f9ff;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+    border: 1px solid #e0e0ff;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.field-row:last-child {
+    margin-bottom: 0;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-group label {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+/* Drag and drop для ценностей */
+.values-list {
+    min-height: 100px;
+}
+
+.value-item {
+    background: white;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: var(--border-radius);
+    border: 2px solid #ddd;
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.value-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(67, 97, 238, 0.2);
+}
+
+.value-item.dragging {
+    opacity: 0.5;
+}
+
+.value-handle {
+    cursor: grab;
+    font-size: 1.2rem;
+    color: var(--gray);
+    margin-right: 10px;
+}
+
+.value-handle:active {
+    cursor: grabbing;
+}
+
+/* Сообщения об ошибках и успехе */
+.message {
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Загрузка */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 3px solid var(--primary);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Адаптивность для компонентов */
+@media (max-width: 768px) {
+    .language-row, .education-row, .skill-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .education-dates {
+        grid-template-columns: 1fr;
+    }
+    
+    .field-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .btn-remove-language, .btn-remove-education, .btn-remove-skill {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
