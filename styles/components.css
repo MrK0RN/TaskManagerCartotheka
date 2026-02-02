@@ -291,22 +291,144 @@
     to { transform: rotate(360deg); }
 }
 
-/* Адаптивность для компонентов */
-@media (max-width: 768px) {
-    .language-row, .education-row, .skill-row {
-        grid-template-columns: 1fr;
+/* Адаптивность для компонентов — планшеты */
+@media (max-width: 1024px) {
+    .language-row {
+        grid-template-columns: 1.5fr 1fr auto;
+        gap: 12px;
     }
-    
+
+    .education-row {
+        grid-template-columns: 1fr 1.5fr 1fr auto;
+        gap: 12px;
+    }
+
+    .skill-row {
+        grid-template-columns: 1.2fr 1.5fr 1.2fr auto;
+        gap: 12px;
+    }
+
+    .field-row {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .language-item,
+    .education-item,
+    .skill-item {
+        padding: 12px;
+    }
+}
+
+/* Адаптивность для компонентов — телефоны */
+@media (max-width: 768px) {
+    .languages-component,
+    .education-component,
+    .skills-component {
+        margin-top: 12px;
+    }
+
+    .language-item,
+    .education-item,
+    .skill-item {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .language-row,
+    .education-row,
+    .skill-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .language-row .btn-remove-language,
+    .education-row .btn-remove-education,
+    .skill-row .btn-remove-skill {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        margin: 0 auto;
+        align-self: center;
+    }
+
     .education-dates {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
-    
+
     .field-row {
         grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 12px;
     }
-    
-    .btn-remove-language, .btn-remove-education, .btn-remove-skill {
+
+    .structured-fields {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .value-item {
+        padding: 10px 12px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .value-handle {
+        order: -1;
+        margin-right: 0;
+    }
+
+    .value-item .value-text {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .autocomplete-dropdown {
+        max-height: 180px;
+    }
+
+    .btn-add-language,
+    .btn-add-education,
+    .btn-add-skill {
         width: 100%;
-        margin-top: 10px;
+        padding: 12px 20px;
+        min-height: 44px;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Маленькие телефоны */
+@media (max-width: 480px) {
+    .language-item,
+    .education-item,
+    .skill-item {
+        padding: 10px;
+    }
+
+    .language-row,
+    .education-row,
+    .skill-row {
+        gap: 10px;
+    }
+
+    .btn-remove-language,
+    .btn-remove-education,
+    .btn-remove-skill {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 1rem;
+    }
+
+    .value-item {
+        padding: 10px;
+    }
+
+    .message {
+        padding: 12px;
+        font-size: 0.95rem;
     }
 }
