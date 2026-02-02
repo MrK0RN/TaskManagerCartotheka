@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-# Порты из docker-compose.yml: приложение 8081, PostgreSQL 5432
+# Порты из docker-compose.yml: приложение 8081, PostgreSQL 5433
 APP_PORT="${APP_PORT:-8081}"
-POSTGRES_PORT="${POSTGRES_PORT:-5432}"
+POSTGRES_PORT="${POSTGRES_PORT:-5433}"
 PORTS_TO_CHECK="$APP_PORT $POSTGRES_PORT"
 
 RED='\033[0;31m'
