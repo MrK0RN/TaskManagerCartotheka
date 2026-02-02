@@ -15,27 +15,19 @@ info()  { echo -e "${GREEN}[INFO]${NC} $*"; }
 warn()  { echo -e "${YELLOW}[WARN]${NC} $*"; }
 err()   { echo -e "${RED}[ERR]${NC} $*"; }
 
-# Проверка, занят ли порт (macOS и Linux)
+# Проверка, занят ли порт: ss -tulnp | grep <port>
 is_port_in_use() {
   local port="$1"
-  if command -v lsof &>/dev/null; then
-    lsof -i ":${port}" -sTCP:LISTEN -t &>/dev/null
-  elif command -v ss &>/dev/null; then
-    ss -tlnp 2>/dev/null | grep -q ":${port} "; return $?
-  else
-    netstat -tlnp 2>/dev/null | grep -q ":${port} "; return $?
-  fi
+  ss -tulnp 2>/dev/null | grep -q ":${port} "
 }
 
-# Получить PID процесса, слушающего порт
+# Получить PID процесса на порту (из вывода ss)
 get_pid_on_port() {
   local port="$1"
-  if command -v lsof &>/dev/null; then
-    lsof -i ":${port}" -sTCP:LISTEN -t 2>/dev/null
-  fi
+  ss -tulnp 2>/dev/null | grep ":${port} " | sed -n 's/.*pid=\([0-9]*\).*/\1/p'
 }
 
-# Освободить порт: завершить процесс
+# Освободить порт: kill <PID>
 free_port() {
   local port="$1"
   local pids
@@ -44,7 +36,7 @@ free_port() {
     for pid in $pids; do
       if kill -0 "$pid" 2>/dev/null; then
         info "Завершаю процесс на порту $port (PID $pid)..."
-        kill "$pid" 2>/dev/null || kill -9 "$pid" 2>/dev/null
+        kill "$pid"
       fi
     done
     sleep 1
