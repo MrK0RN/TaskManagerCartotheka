@@ -39,7 +39,7 @@ services:
   telegram-bot:
     build: ./telegram_bot
     environment:
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-7692590189:AAHmvfodplPQ_O38WkJzB747KTu2E_APzxM}
+      TELEGRAM_BOT_TOKEN: ${}
       SITE_URL: ${SITE_URL:-http://195.133.145.14:8081}
       DB_HOST: db
       DB_PORT: "5433"
