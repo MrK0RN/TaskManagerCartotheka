@@ -848,11 +848,30 @@
 }
 
 .meeting-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
     padding: 16px;
     margin-bottom: 12px;
     background: #f8f9fa;
     border-radius: var(--border-radius);
     border-left: 4px solid var(--primary);
+}
+
+.meeting-item-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.meeting-item-actions {
+    flex-shrink: 0;
+}
+
+.meeting-item .btn-small {
+    padding: 6px 12px;
+    font-size: 0.875rem;
 }
 
 .meeting-item-date {

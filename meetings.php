@@ -66,6 +66,7 @@ $fio = isset($s['fio']) && $s['fio'] !== '' ? $s['fio'] : 'Без имени';
             <div class="meetings-form-wrap">
                 <form id="meetingForm" class="meetings-form">
                     <input type="hidden" name="portrait_id" id="meeting_portrait_id" value="<?php echo (int)$portraitId; ?>">
+                    <input type="hidden" id="meeting_edit_id" name="meeting_edit_id" value="">
                     <div class="form-group">
                         <label for="meeting_date">Дата</label>
                         <input type="date" id="meeting_date" name="meeting_date" required>
@@ -79,7 +80,8 @@ $fio = isset($s['fio']) && $s['fio'] !== '' ? $s['fio'] : 'Без имени';
                         <textarea id="meeting_description" name="description" rows="3" placeholder="Описание встречи"></textarea>
                     </div>
                     <div class="btn-container">
-                        <button type="submit" class="btn btn-primary">Добавить встречу</button>
+                        <button type="submit" class="btn btn-primary" id="meetingSubmitBtn">Добавить встречу</button>
+                        <button type="button" class="btn btn-outline" id="meetingCancelEditBtn" style="display: none;">Отмена</button>
                     </div>
                 </form>
             </div>
