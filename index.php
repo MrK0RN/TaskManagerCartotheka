@@ -73,6 +73,9 @@ $sections = [
         <?php include COMPONENTS_PATH . '/header.php'; ?>
 
         <div class="form-container">
+            <?php if ($portraitId): ?>
+            <p class="form-back-link"><a href="list.php">← Вернуться к списку</a></p>
+            <?php endif; ?>
             <form id="personalityForm" method="POST" action="api/save.php">
                 <input type="hidden" name="portrait_id" id="portrait_id" value="<?php echo $portraitId ?: ''; ?>">
                 

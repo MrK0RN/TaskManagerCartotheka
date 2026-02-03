@@ -432,3 +432,111 @@
         font-size: 0.95rem;
     }
 }
+
+/* Страница списка портретов */
+.list-page {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 30px;
+}
+
+.list-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.list-toolbar .list-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--dark);
+}
+
+.list-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: flex-end;
+}
+
+.list-filters .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.list-filters label {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.list-filters input[type="text"],
+.list-filters input[type="date"],
+.list-filters select {
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    min-width: 160px;
+}
+
+.list-table-wrap {
+    overflow-x: auto;
+}
+
+.list-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.list-table th,
+.list-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.list-table th {
+    font-weight: 600;
+    color: var(--dark);
+    background: #f8f9fa;
+}
+
+.list-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.list-cell-fio {
+    font-weight: 500;
+}
+
+.list-cell-action {
+    white-space: nowrap;
+}
+
+.btn-small {
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 0.9rem;
+}
+
+.list-loading,
+.list-error,
+.list-empty {
+    padding: 24px;
+    text-align: center;
+    color: var(--gray);
+}
+
+.list-error {
+    color: #c0392b;
+}
+
+.list-empty a {
+    color: var(--primary);
+}

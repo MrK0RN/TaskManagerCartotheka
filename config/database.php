@@ -25,7 +25,7 @@ class Database {
 
             $this->connection = new PDO($dsn, DB_USER, DB_PASS, $options);
         } catch (PDOException $e) {
-            die("Ошибка подключения к базе данных: " . $e->getMessage());
+            throw new Exception("Ошибка подключения к базе данных: " . $e->getMessage());
         }
     }
 

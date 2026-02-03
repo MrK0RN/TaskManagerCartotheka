@@ -55,6 +55,36 @@ h1 {
     opacity: 0.9;
 }
 
+.header-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 16px;
+}
+
+.header-nav a {
+    color: rgba(255, 255, 255, 0.95);
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.header-nav a:hover {
+    text-decoration: underline;
+}
+
+.form-back-link {
+    margin-bottom: 16px;
+}
+
+.form-back-link a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.form-back-link a:hover {
+    text-decoration: underline;
+}
+
 .form-container {
     background: white;
     border-radius: var(--border-radius);

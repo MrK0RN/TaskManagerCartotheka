@@ -85,6 +85,10 @@ function saveForm() {
             // Обновляем portrait_id если он был создан
             if (data.portrait_id) {
                 document.getElementById('portrait_id').value = data.portrait_id;
+                // Обновляем URL без перезагрузки, чтобы при обновлении страницы остаться на том же портрете
+                if (!window.location.search.includes('id=')) {
+                    history.replaceState(null, '', 'index.php?id=' + data.portrait_id);
+                }
             }
             
             showMessage('Данные успешно сохранены!', 'success');
