@@ -22,6 +22,12 @@ define('API_PATH', ROOT_PATH . '/api');
 define('STYLES_PATH', ROOT_PATH . '/styles');
 define('SCRIPTS_PATH', ROOT_PATH . '/scripts');
 
+// Версия по времени изменения файла (для сброса кэша CSS/JS)
+function asset_version($path) {
+    $full = ROOT_PATH . '/' . ltrim($path, '/');
+    return file_exists($full) ? '?v=' . filemtime($full) : '';
+}
+
 // Настройки сессии
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

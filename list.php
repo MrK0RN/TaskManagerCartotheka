@@ -7,8 +7,8 @@ require_once __DIR__ . '/config/config.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Список портретов — Портрет личности</title>
-    <link rel="stylesheet" href="styles/common.css">
-    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/common.css<?php echo asset_version('styles/common.css'); ?>">
+    <link rel="stylesheet" href="styles/components.css<?php echo asset_version('styles/components.css'); ?>">
 </head>
 <body>
     <div class="container">
