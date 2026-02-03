@@ -1,8 +1,11 @@
 <?php
 // Компонент для выбора языков с уровнем владения
-// Принимает параметры: $languages (массив сохраненных языков), $paramName (имя поля)
+// Принимает параметры: $languages (массив сохраненных языков), $paramName (имя поля), $readOnly
 $paramName = $paramName ?? 'languages';
 $savedLanguages = $languages ?? [];
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 $languagesList = [];
 
 // Получаем список языков из БД
@@ -41,7 +44,7 @@ $levels = [
                 <div class="language-row">
                     <div class="language-select-wrapper">
                         <label>Язык:</label>
-                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][language_id]" class="language-select" data-autocomplete>
+                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][language_id]" class="language-select" data-autocomplete<?php echo $roDis; ?>>
                             <option value="">-- Выберите язык --</option>
                             <?php foreach ($languagesList as $lang): ?>
                                 <option value="<?php echo $lang['id']; ?>"><?php echo htmlspecialchars($lang['name']); ?></option>
@@ -52,18 +55,18 @@ $levels = [
                     </div>
                     <div class="level-select-wrapper">
                         <label>Уровень:</label>
-                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][level]" class="level-select">
+                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][level]" class="level-select"<?php echo $roDis; ?>>
                             <option value="">-- Выберите уровень --</option>
                             <?php foreach ($levels as $key => $label): ?>
                                 <option value="<?php echo $key; ?>"><?php echo htmlspecialchars($label); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <button type="button" class="btn-remove-language" onclick="removeLanguage(this)" style="display:none;">✕</button>
+                    <?php if (!$readOnly): ?><button type="button" class="btn-remove-language" onclick="removeLanguage(this)" style="display:none;">✕</button><?php endif; ?>
                 </div>
                 <div class="comment-wrapper">
                     <label>Комментарий:</label>
-                    <textarea name="<?php echo htmlspecialchars($paramName); ?>[0][comment]" class="language-comment" placeholder="Дополнительная информация о владении языком..." rows="2"></textarea>
+                    <textarea name="<?php echo htmlspecialchars($paramName); ?>[0][comment]" class="language-comment" placeholder="Дополнительная информация о владении языком..." rows="2"<?php echo $ro; ?>></textarea>
                 </div>
             </div>
         <?php else: ?>
@@ -72,7 +75,7 @@ $levels = [
                     <div class="language-row">
                         <div class="language-select-wrapper">
                             <label>Язык:</label>
-                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][language_id]" class="language-select" data-autocomplete>
+                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][language_id]" class="language-select" data-autocomplete<?php echo $roDis; ?>>
                                 <option value="">-- Выберите язык --</option>
                                 <?php foreach ($languagesList as $langOption): ?>
                                     <option value="<?php echo $langOption['id']; ?>" <?php echo (isset($lang['language_id']) && $lang['language_id'] == $langOption['id']) ? 'selected' : ''; ?>>
@@ -85,7 +88,7 @@ $levels = [
                         </div>
                         <div class="level-select-wrapper">
                             <label>Уровень:</label>
-                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][level]" class="level-select">
+                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][level]" class="level-select"<?php echo $roDis; ?>>
                                 <option value="">-- Выберите уровень --</option>
                                 <?php foreach ($levels as $key => $label): ?>
                                     <option value="<?php echo $key; ?>" <?php echo (isset($lang['level']) && $lang['level'] == $key) ? 'selected' : ''; ?>>
@@ -94,17 +97,17 @@ $levels = [
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <button type="button" class="btn-remove-language" onclick="removeLanguage(this)">✕</button>
+                        <?php if (!$readOnly): ?><button type="button" class="btn-remove-language" onclick="removeLanguage(this)">✕</button><?php endif; ?>
                     </div>
                     <div class="comment-wrapper">
                         <label>Комментарий:</label>
-                        <textarea name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][comment]" class="language-comment" placeholder="Дополнительная информация о владении языком..." rows="2"><?php echo isset($lang['comment']) ? htmlspecialchars($lang['comment']) : ''; ?></textarea>
+                        <textarea name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][comment]" class="language-comment" placeholder="Дополнительная информация о владении языком..." rows="2"<?php echo $ro; ?>><?php echo isset($lang['comment']) ? htmlspecialchars($lang['comment']) : ''; ?></textarea>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
-    <button type="button" class="btn-add-language" onclick="addLanguage('<?php echo htmlspecialchars($paramName); ?>')">+ Добавить язык</button>
+    <?php if (!$readOnly): ?><button type="button" class="btn-add-language" onclick="addLanguage('<?php echo htmlspecialchars($paramName); ?>')">+ Добавить язык</button><?php endif; ?>
 </div>
 
 <script>

@@ -3,6 +3,9 @@
 $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_text' => ''];
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_17"><span class="param-name">17. Мировоззрение и убеждения</span></label>
@@ -23,7 +26,7 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>Религиозные/духовные взгляды:</label>
-                <select name="param_17_religious_views" id="param_17_religious_views">
+                <select name="param_17_religious_views" id="param_17_religious_views"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="believer" <?php echo (isset($structured['religious_views']) && $structured['religious_views'] == 'believer') ? 'selected' : ''; ?>>Верующий</option>
                     <option value="agnostic" <?php echo (isset($structured['religious_views']) && $structured['religious_views'] == 'agnostic') ? 'selected' : ''; ?>>Агностик</option>
@@ -32,7 +35,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>Философский взгляд на мир:</label>
-                <select name="param_17_philosophical" id="param_17_philosophical">
+                <select name="param_17_philosophical" id="param_17_philosophical"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="optimistic" <?php echo (isset($structured['philosophical']) && $structured['philosophical'] == 'optimistic') ? 'selected' : ''; ?>>Оптимистичный</option>
                     <option value="pessimistic" <?php echo (isset($structured['philosophical']) && $structured['philosophical'] == 'pessimistic') ? 'selected' : ''; ?>>Пессимистичный</option>
@@ -43,5 +46,5 @@ $freeText = $paramData['free_text'] ?? '';
     </div>
     
     <label for="param_17_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
-    <textarea name="param_17_free_text" id="param_17_free_text" class="xlarge"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_17_free_text" id="param_17_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

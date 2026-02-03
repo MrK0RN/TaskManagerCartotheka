@@ -3,6 +3,9 @@
 $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_text' => ''];
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_2"><span class="param-name">2. Семейное положение и структура</span></label>
@@ -22,7 +25,7 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>Семейное положение:</label>
-                <select name="param_2_status" id="param_2_status">
+                <select name="param_2_status" id="param_2_status"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="single" <?php echo (isset($structured['status']) && $structured['status'] == 'single') ? 'selected' : ''; ?>>Холост/Не замужем</option>
                     <option value="married" <?php echo (isset($structured['status']) && $structured['status'] == 'married') ? 'selected' : ''; ?>>В браке</option>
@@ -33,7 +36,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>Количество детей:</label>
-                <input type="number" name="param_2_children_count" id="param_2_children_count" value="<?php echo htmlspecialchars($structured['children_count'] ?? ''); ?>" placeholder="0" min="0" max="20">
+                <input type="number" name="param_2_children_count" id="param_2_children_count" value="<?php echo htmlspecialchars($structured['children_count'] ?? ''); ?>" placeholder="0" min="0" max="20"<?php echo $ro; ?>>
             </div>
         </div>
         <div id="children-ages-container">
@@ -42,19 +45,19 @@ $freeText = $paramData['free_text'] ?? '';
                     <div class="field-row child-age-row">
                         <div class="field-group">
                             <label>Возраст ребенка <?php echo $index + 1; ?>:</label>
-                            <input type="number" name="param_2_children_ages[]" value="<?php echo htmlspecialchars($age); ?>" placeholder="Возраст" min="0" max="100">
+                            <input type="number" name="param_2_children_ages[]" value="<?php echo htmlspecialchars($age); ?>" placeholder="Возраст" min="0" max="100"<?php echo $ro; ?>>
                         </div>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-        <button type="button" class="btn" onclick="addChildAge()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">+ Добавить возраст ребенка</button>
+        <?php if (!$readOnly): ?><button type="button" class="btn" onclick="addChildAge()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">+ Добавить возраст ребенка</button><?php endif; ?>
     </div>
     
     <label for="param_2_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
-    <textarea name="param_2_free_text" id="param_2_free_text" class="large"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_2_free_text" id="param_2_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>
-
+<?php if (!$readOnly): ?>
 <script>
 function addChildAge() {
     const container = document.getElementById('children-ages-container');
@@ -70,3 +73,4 @@ function addChildAge() {
     container.appendChild(row);
 }
 </script>
+<?php endif; ?>

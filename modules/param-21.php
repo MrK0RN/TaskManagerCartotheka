@@ -3,6 +3,8 @@
 $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_text' => ''];
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
 ?>
 <div class="form-group">
     <label for="param_21"><span class="param-name">21. Ролевой репертуар</span></label>
@@ -27,5 +29,5 @@ $freeText = $paramData['free_text'] ?? '';
     </div>
     
     <label for="param_21_free_text">Описание ролевого репертуара:</label>
-    <textarea name="param_21_free_text" id="param_21_free_text" class="xlarge"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_21_free_text" id="param_21_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

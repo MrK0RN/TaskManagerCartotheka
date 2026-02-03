@@ -3,6 +3,9 @@
 $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_text' => ''];
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_13"><span class="param-name">13. Когнитивный стиль</span></label>
@@ -22,7 +25,7 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>Тип мышления:</label>
-                <select name="param_13_thinking_type" id="param_13_thinking_type">
+                <select name="param_13_thinking_type" id="param_13_thinking_type"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="analytical" <?php echo (isset($structured['thinking_type']) && $structured['thinking_type'] == 'analytical') ? 'selected' : ''; ?>>Аналитический</option>
                     <option value="synthetic" <?php echo (isset($structured['thinking_type']) && $structured['thinking_type'] == 'synthetic') ? 'selected' : ''; ?>>Синтетический</option>
@@ -33,7 +36,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>Тип восприятия:</label>
-                <select name="param_13_perception" id="param_13_perception">
+                <select name="param_13_perception" id="param_13_perception"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="visual" <?php echo (isset($structured['perception']) && $structured['perception'] == 'visual') ? 'selected' : ''; ?>>Визуальный</option>
                     <option value="auditory" <?php echo (isset($structured['perception']) && $structured['perception'] == 'auditory') ? 'selected' : ''; ?>>Аудиальный</option>
@@ -43,7 +46,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>Скорость принятия решений:</label>
-                <select name="param_13_decision_speed" id="param_13_decision_speed">
+                <select name="param_13_decision_speed" id="param_13_decision_speed"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="very_fast" <?php echo (isset($structured['decision_speed']) && $structured['decision_speed'] == 'very_fast') ? 'selected' : ''; ?>>Очень быстро</option>
                     <option value="fast" <?php echo (isset($structured['decision_speed']) && $structured['decision_speed'] == 'fast') ? 'selected' : ''; ?>>Быстро</option>
@@ -55,5 +58,5 @@ $freeText = $paramData['free_text'] ?? '';
     </div>
     
     <label for="param_13_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
-    <textarea name="param_13_free_text" id="param_13_free_text" class="large"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_13_free_text" id="param_13_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

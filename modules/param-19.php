@@ -4,6 +4,9 @@ $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_te
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
 $identities = isset($structured['identities']) ? $structured['identities'] : [];
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_19"><span class="param-name">19. Социальная идентичность</span></label>
@@ -63,5 +66,5 @@ $identities = isset($structured['identities']) ? $structured['identities'] : [];
     </div>
     
     <label for="param_19_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
-    <textarea name="param_19_free_text" id="param_19_free_text" class="large"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_19_free_text" id="param_19_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

@@ -3,6 +3,9 @@
 $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_text' => ''];
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_18"><span class="param-name">18. Жизненные цели и смысложизненные ориентиры</span></label>
@@ -28,7 +31,7 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>Источник смысла:</label>
-                <select name="param_18_meaning_source" id="param_18_meaning_source">
+                <select name="param_18_meaning_source" id="param_18_meaning_source"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="love" <?php echo (isset($structured['meaning_source']) && $structured['meaning_source'] == 'love') ? 'selected' : ''; ?>>Любовь</option>
                     <option value="creativity" <?php echo (isset($structured['meaning_source']) && $structured['meaning_source'] == 'creativity') ? 'selected' : ''; ?>>Творчество</option>
@@ -40,7 +43,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>
-                    <input type="checkbox" name="param_18_has_vocation" value="1" <?php echo (isset($structured['has_vocation']) && $structured['has_vocation']) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_18_has_vocation" value="1" <?php echo (isset($structured['has_vocation']) && $structured['has_vocation']) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Есть ощущение призвания/миссии
                 </label>
             </div>
@@ -48,5 +51,5 @@ $freeText = $paramData['free_text'] ?? '';
     </div>
     
     <label for="param_18_free_text" style="margin-top: 15px;">Цели и ориентиры:</label>
-    <textarea name="param_18_free_text" id="param_18_free_text" class="xlarge"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_18_free_text" id="param_18_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

@@ -3,7 +3,7 @@ require_once __DIR__ . '/config/config.php';
 
 $portraitId = isset($_GET['id']) ? (int)$_GET['id'] : null;
 $portrait = null;
-$param1 = ['structured_data' => [], 'free_text' => ''];
+$portraitData = [];
 
 if ($portraitId) {
     try {
@@ -13,12 +13,20 @@ if ($portraitId) {
         $stmt->execute([':id' => $portraitId]);
         $portrait = $stmt->fetch();
         if ($portrait) {
-            $stmt = $db->prepare("SELECT structured_data, free_text FROM portrait_data WHERE portrait_id = :portrait_id AND param_number = 1");
+            $stmt = $db->prepare("
+                SELECT param_number, structured_data, free_text
+                FROM portrait_data
+                WHERE portrait_id = :portrait_id
+                ORDER BY param_number
+            ");
             $stmt->execute([':portrait_id' => $portraitId]);
-            $row = $stmt->fetch();
-            if ($row) {
-                $param1['structured_data'] = $row['structured_data'] ? json_decode($row['structured_data'], true) : [];
-                $param1['free_text'] = $row['free_text'] ?: '';
+            $dataRows = $stmt->fetchAll();
+            foreach ($dataRows as $row) {
+                $paramNumber = $row['param_number'];
+                $portraitData[$paramNumber] = [
+                    'structured_data' => $row['structured_data'] ? json_decode($row['structured_data'], true) : [],
+                    'free_text' => $row['free_text'] ?: ''
+                ];
             }
         }
     } catch (Exception $e) {
@@ -31,22 +39,20 @@ if (!$portrait) {
     exit;
 }
 
-$s = $param1['structured_data'];
-$fio = isset($s['fio']) && $s['fio'] !== '' ? $s['fio'] : 'Без имени';
-$birthDate = isset($s['birth_date']) && $s['birth_date'] !== '' ? $s['birth_date'] : null;
-$age = isset($s['age']) && $s['age'] !== '' ? $s['age'] : null;
-$gender = isset($s['gender']) ? $s['gender'] : '';
-$genderLabels = ['male' => 'Мужской', 'female' => 'Женский', 'other' => 'Другое'];
-$citizenship = isset($s['citizenship']) && $s['citizenship'] !== '' ? $s['citizenship'] : null;
-$birthplace = isset($s['birthplace']) && $s['birthplace'] !== '' ? $s['birthplace'] : null;
-$residence = isset($s['residence']) && $s['residence'] !== '' ? $s['residence'] : null;
-$statusText = $portrait['status'] === 'completed' ? 'Завершён' : 'Черновик';
-$createdAt = $portrait['created_at'] ? date('d.m.Y', strtotime($portrait['created_at'])) : '—';
-$updatedAt = $portrait['updated_at'] ? date('d.m.Y', strtotime($portrait['updated_at'])) : '—';
+$readOnly = true;
 
-function fmt($v) {
-    return $v !== null && $v !== '' ? htmlspecialchars($v) : '—';
-}
+$sections = [
+    ['title' => '📋 Справочные (демографические и биографические) данные', 'params' => [1, 2, 3, 4]],
+    ['title' => '💼 Ресурсы личности', 'params' => [5, 6, 7, 8, 9, 10, 11]],
+    ['title' => '🧠 Психологический профиль', 'params' => [12, 13, 14, 15]],
+    ['title' => '🌍 Ценностно-смысловая сфера', 'params' => [16, 17, 18]],
+    ['title' => '👥 Социальное измерение', 'params' => [19, 20, 21, 22]],
+    ['title' => '🔄 Поведенческие и контекстуальные паттерны', 'params' => [23, 24, 25]]
+];
+
+$s = $portraitData[1]['structured_data'] ?? [];
+$fio = isset($s['fio']) && $s['fio'] !== '' ? $s['fio'] : 'Без имени';
+$statusText = $portrait['status'] === 'completed' ? 'Завершён' : 'Черновик';
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -61,65 +67,41 @@ function fmt($v) {
     <div class="container">
         <?php include COMPONENTS_PATH . '/header.php'; ?>
 
-        <div class="person-card-page">
+        <div class="form-container view-mode">
             <p class="form-back-link"><a href="list.php">← Вернуться к списку</a></p>
 
-            <article class="person-card">
-                <header class="person-card-header">
-                    <h1 class="person-card-title"><?php echo htmlspecialchars($fio); ?></h1>
-                    <span class="person-card-status person-card-status--<?php echo $portrait['status']; ?>"><?php echo htmlspecialchars($statusText); ?></span>
-                </header>
-
-                <div class="person-card-body">
-                    <dl class="person-card-fields">
-                        <div class="person-card-row">
-                            <dt>Дата рождения</dt>
-                            <dd><?php echo $birthDate ? date('d.m.Y', strtotime($birthDate)) : '—'; ?></dd>
-                        </div>
-                        <div class="person-card-row">
-                            <dt>Возраст</dt>
-                            <dd><?php echo fmt($age); ?></dd>
-                        </div>
-                        <div class="person-card-row">
-                            <dt>Пол</dt>
-                            <dd><?php echo isset($genderLabels[$gender]) ? $genderLabels[$gender] : '—'; ?></dd>
-                        </div>
-                        <div class="person-card-row">
-                            <dt>Гражданство</dt>
-                            <dd><?php echo fmt($citizenship); ?></dd>
-                        </div>
-                        <div class="person-card-row">
-                            <dt>Место рождения</dt>
-                            <dd><?php echo fmt($birthplace); ?></dd>
-                        </div>
-                        <div class="person-card-row">
-                            <dt>Место проживания</dt>
-                            <dd><?php echo fmt($residence); ?></dd>
-                        </div>
-                        <div class="person-card-row">
-                            <dt>Создан</dt>
-                            <dd><?php echo htmlspecialchars($createdAt); ?></dd>
-                        </div>
-                        <div class="person-card-row">
-                            <dt>Обновлён</dt>
-                            <dd><?php echo htmlspecialchars($updatedAt); ?></dd>
-                        </div>
-                    </dl>
-                    <?php if (trim($param1['free_text']) !== ''): ?>
-                    <div class="person-card-extra">
-                        <h3 class="person-card-extra-title">Дополнительные детали</h3>
-                        <div class="person-card-extra-text"><?php echo nl2br(htmlspecialchars($param1['free_text'])); ?></div>
+            <div id="personalityView">
+                <?php foreach ($sections as $sectionIndex => $section): ?>
+                <div class="section" data-section="<?php echo $sectionIndex; ?>">
+                    <div class="section-header" onclick="toggleSection(this)">
+                        <h2><?php echo htmlspecialchars($section['title']); ?></h2>
+                        <span class="toggle-icon">▼</span>
                     </div>
-                    <?php endif; ?>
+                    <div class="section-content">
+                        <?php foreach ($section['params'] as $paramNumber): ?>
+                            <?php
+                            $paramData = isset($portraitData[$paramNumber]) ? $portraitData[$paramNumber] : ['structured_data' => [], 'free_text' => ''];
+                            $moduleFile = MODULES_PATH . '/param-' . $paramNumber . '.php';
+                            if (file_exists($moduleFile)) {
+                                include $moduleFile;
+                            } else {
+                                echo '<div class="form-group"><p>Модуль param-' . $paramNumber . '.php не найден</p></div>';
+                            }
+                            ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
+                <?php endforeach; ?>
 
-                <footer class="person-card-footer">
+                <div class="btn-container">
                     <a href="index.php?id=<?php echo (int)$portraitId; ?>" class="btn btn-primary">Редактировать портрет</a>
-                </footer>
-            </article>
+                </div>
+            </div>
         </div>
 
         <?php include COMPONENTS_PATH . '/footer.php'; ?>
     </div>
+
+    <script src="scripts/main.js"></script>
 </body>
 </html>

@@ -3,6 +3,8 @@
 $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_text' => ''];
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
 ?>
 <div class="form-group">
     <label for="param_25"><span class="param-name">25. Зоны роста и внутренние противоречия</span></label>
@@ -40,5 +42,5 @@ $freeText = $paramData['free_text'] ?? '';
     </div>
     
     <label for="param_25_free_text">Анализ зон роста и противоречий:</label>
-    <textarea name="param_25_free_text" id="param_25_free_text" class="xlarge"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_25_free_text" id="param_25_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

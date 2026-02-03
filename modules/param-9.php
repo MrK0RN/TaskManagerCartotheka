@@ -3,6 +3,9 @@
 $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_text' => ''];
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_9"><span class="param-name">9. Социальный капитал</span></label>
@@ -22,7 +25,7 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>Количество значимых контактов:</label>
-                <select name="param_9_contacts_scale" id="param_9_contacts_scale">
+                <select name="param_9_contacts_scale" id="param_9_contacts_scale"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="very_large" <?php echo (isset($structured['contacts_scale']) && $structured['contacts_scale'] == 'very_large') ? 'selected' : ''; ?>>Очень большая сеть (100+)</option>
                     <option value="large" <?php echo (isset($structured['contacts_scale']) && $structured['contacts_scale'] == 'large') ? 'selected' : ''; ?>>Большая сеть (50-100)</option>
@@ -33,7 +36,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>Качество связей:</label>
-                <select name="param_9_quality" id="param_9_quality">
+                <select name="param_9_quality" id="param_9_quality"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="very_high" <?php echo (isset($structured['quality']) && $structured['quality'] == 'very_high') ? 'selected' : ''; ?>>Очень высокое</option>
                     <option value="high" <?php echo (isset($structured['quality']) && $structured['quality'] == 'high') ? 'selected' : ''; ?>>Высокое</option>
@@ -45,13 +48,13 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>
-                    <input type="checkbox" name="param_9_has_influential" value="1" <?php echo (isset($structured['has_influential']) && $structured['has_influential']) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_9_has_influential" value="1" <?php echo (isset($structured['has_influential']) && $structured['has_influential']) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Есть влиятельные связи
                 </label>
             </div>
             <div class="field-group">
                 <label>
-                    <input type="checkbox" name="param_9_in_communities" value="1" <?php echo (isset($structured['in_communities']) && $structured['in_communities']) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_9_in_communities" value="1" <?php echo (isset($structured['in_communities']) && $structured['in_communities']) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Участвует в сообществах
                 </label>
             </div>
@@ -59,5 +62,5 @@ $freeText = $paramData['free_text'] ?? '';
     </div>
     
     <label for="param_9_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
-    <textarea name="param_9_free_text" id="param_9_free_text" class="large"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_9_free_text" id="param_9_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

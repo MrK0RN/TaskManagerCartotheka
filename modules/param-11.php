@@ -3,6 +3,9 @@
 $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_text' => ''];
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_11"><span class="param-name">11. Психологические ресурсы</span></label>
@@ -23,7 +26,7 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>Стрессоустойчивость:</label>
-                <select name="param_11_stress_resistance" id="param_11_stress_resistance">
+                <select name="param_11_stress_resistance" id="param_11_stress_resistance"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="very_high" <?php echo (isset($structured['stress_resistance']) && $structured['stress_resistance'] == 'very_high') ? 'selected' : ''; ?>>Очень высокая</option>
                     <option value="high" <?php echo (isset($structured['stress_resistance']) && $structured['stress_resistance'] == 'high') ? 'selected' : ''; ?>>Высокая</option>
@@ -33,7 +36,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>Эмоциональный интеллект:</label>
-                <select name="param_11_eq" id="param_11_eq">
+                <select name="param_11_eq" id="param_11_eq"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="very_high" <?php echo (isset($structured['eq']) && $structured['eq'] == 'very_high') ? 'selected' : ''; ?>>Очень высокий</option>
                     <option value="high" <?php echo (isset($structured['eq']) && $structured['eq'] == 'high') ? 'selected' : ''; ?>>Высокий</option>
@@ -43,7 +46,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>Оптимизм/Пессимизм:</label>
-                <select name="param_11_outlook" id="param_11_outlook">
+                <select name="param_11_outlook" id="param_11_outlook"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="very_optimistic" <?php echo (isset($structured['outlook']) && $structured['outlook'] == 'very_optimistic') ? 'selected' : ''; ?>>Очень оптимистичный</option>
                     <option value="optimistic" <?php echo (isset($structured['outlook']) && $structured['outlook'] == 'optimistic') ? 'selected' : ''; ?>>Оптимистичный</option>
@@ -55,7 +58,7 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>Гибкость:</label>
-                <select name="param_11_flexibility" id="param_11_flexibility">
+                <select name="param_11_flexibility" id="param_11_flexibility"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="very_high" <?php echo (isset($structured['flexibility']) && $structured['flexibility'] == 'very_high') ? 'selected' : ''; ?>>Очень высокая</option>
                     <option value="high" <?php echo (isset($structured['flexibility']) && $structured['flexibility'] == 'high') ? 'selected' : ''; ?>>Высокая</option>
@@ -67,5 +70,5 @@ $freeText = $paramData['free_text'] ?? '';
     </div>
     
     <label for="param_11_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
-    <textarea name="param_11_free_text" id="param_11_free_text" class="large"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_11_free_text" id="param_11_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

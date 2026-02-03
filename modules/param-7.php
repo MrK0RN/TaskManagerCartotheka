@@ -4,6 +4,8 @@ $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_te
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
 $skills = isset($structured['skills']) ? $structured['skills'] : [];
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
 ?>
 <div class="form-group">
     <label for="param_7"><span class="param-name">7. Профессиональные навыки и компетенции</span></label>
@@ -23,5 +25,5 @@ $skills = isset($structured['skills']) ? $structured['skills'] : [];
     ?>
     
     <label for="param_7_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
-    <textarea name="param_7_free_text" id="param_7_free_text" class="large"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_7_free_text" id="param_7_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

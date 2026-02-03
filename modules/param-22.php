@@ -4,6 +4,9 @@ $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_te
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
 $strategies = isset($structured['strategies']) ? $structured['strategies'] : [];
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_22"><span class="param-name">22. Паттерны в конфликтах</span></label>
@@ -24,29 +27,29 @@ $strategies = isset($structured['strategies']) ? $structured['strategies'] : [];
         <div class="options-grid">
             <div class="option-item">
                 <label>
-                    <input type="checkbox" name="param_22_strategies[]" value="cooperation" <?php echo in_array('cooperation', $strategies) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_22_strategies[]" value="cooperation" <?php echo in_array('cooperation', $strategies) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Сотрудничество (ищу взаимовыгодное решение)
                 </label>
                 <label>
-                    <input type="checkbox" name="param_22_strategies[]" value="compromise" <?php echo in_array('compromise', $strategies) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_22_strategies[]" value="compromise" <?php echo in_array('compromise', $strategies) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Компромисс (готов пойти на уступки)
                 </label>
                 <label>
-                    <input type="checkbox" name="param_22_strategies[]" value="avoidance" <?php echo in_array('avoidance', $strategies) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_22_strategies[]" value="avoidance" <?php echo in_array('avoidance', $strategies) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Избегание (уходит от конфликта)
                 </label>
             </div>
             <div class="option-item">
                 <label>
-                    <input type="checkbox" name="param_22_strategies[]" value="competition" <?php echo in_array('competition', $strategies) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_22_strategies[]" value="competition" <?php echo in_array('competition', $strategies) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Конкуренция (стоит на своём)
                 </label>
                 <label>
-                    <input type="checkbox" name="param_22_strategies[]" value="accommodation" <?php echo in_array('accommodation', $strategies) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_22_strategies[]" value="accommodation" <?php echo in_array('accommodation', $strategies) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Приспособление (уступает ради мира)
                 </label>
                 <label>
-                    <input type="checkbox" name="param_22_strategies[]" value="passive_aggression" <?php echo in_array('passive_aggression', $strategies) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_22_strategies[]" value="passive_aggression" <?php echo in_array('passive_aggression', $strategies) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Пассивная агрессия
                 </label>
             </div>
@@ -54,5 +57,5 @@ $strategies = isset($structured['strategies']) ? $structured['strategies'] : [];
     </div>
     
     <label for="param_22_free_text" style="margin-top: 15px;">Дополнительный анализ:</label>
-    <textarea name="param_22_free_text" id="param_22_free_text" class="large"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_22_free_text" id="param_22_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

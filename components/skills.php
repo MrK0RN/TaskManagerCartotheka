@@ -1,8 +1,11 @@
 <?php
 // Компонент для навыков (Hard/Soft skills)
-// Принимает параметры: $skills (массив сохраненных навыков), $paramName
+// Принимает параметры: $skills (массив сохраненных навыков), $paramName, $readOnly
 $paramName = $paramName ?? 'skills';
 $savedSkills = $skills ?? [];
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 
 $skillCategories = [
     'hard' => 'Hard skills',
@@ -42,7 +45,7 @@ foreach ($skillsList as $skill) {
                 <div class="skill-row">
                     <div class="skill-category-wrapper">
                         <label>Категория:</label>
-                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][category]" class="skill-category" onchange="updateSkillOptions(this)">
+                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][category]" class="skill-category" onchange="updateSkillOptions(this)"<?php echo $roDis; ?>>
                             <option value="">-- Выберите категорию --</option>
                             <?php foreach ($skillCategories as $key => $label): ?>
                                 <option value="<?php echo $key; ?>"><?php echo htmlspecialchars($label); ?></option>
@@ -51,25 +54,25 @@ foreach ($skillsList as $skill) {
                     </div>
                     <div class="skill-name-wrapper">
                         <label>Навык:</label>
-                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][skill_id]" class="skill-select" data-category="">
+                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][skill_id]" class="skill-select" data-category=""<?php echo $roDis; ?>>
                             <option value="">-- Сначала выберите категорию --</option>
                         </select>
-                        <input type="text" class="skill-custom-input" name="<?php echo htmlspecialchars($paramName); ?>[0][skill_custom]" placeholder="Или введите свой навык" style="display:none;">
+                        <input type="text" class="skill-custom-input" name="<?php echo htmlspecialchars($paramName); ?>[0][skill_custom]" placeholder="Или введите свой навык" style="display:none;"<?php echo $ro; ?>>
                     </div>
                     <div class="skill-level-wrapper">
                         <label>Уровень:</label>
-                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][level]" class="skill-level">
+                        <select name="<?php echo htmlspecialchars($paramName); ?>[0][level]" class="skill-level"<?php echo $roDis; ?>>
                             <option value="">-- Выберите уровень --</option>
                             <?php foreach ($skillLevels as $key => $label): ?>
                                 <option value="<?php echo $key; ?>"><?php echo htmlspecialchars($label); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <button type="button" class="btn-remove-skill" onclick="removeSkill(this)" style="display:none;">✕</button>
+                    <?php if (!$readOnly): ?><button type="button" class="btn-remove-skill" onclick="removeSkill(this)" style="display:none;">✕</button><?php endif; ?>
                 </div>
                 <div class="skill-comment-wrapper">
                     <label>Комментарий:</label>
-                    <textarea name="<?php echo htmlspecialchars($paramName); ?>[0][comment]" class="skill-comment" placeholder="Дополнительная информация о навыке..." rows="2"></textarea>
+                    <textarea name="<?php echo htmlspecialchars($paramName); ?>[0][comment]" class="skill-comment" placeholder="Дополнительная информация о навыке..." rows="2"<?php echo $ro; ?>></textarea>
                 </div>
             </div>
         <?php else: ?>
@@ -78,7 +81,7 @@ foreach ($skillsList as $skill) {
                     <div class="skill-row">
                         <div class="skill-category-wrapper">
                             <label>Категория:</label>
-                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][category]" class="skill-category" onchange="updateSkillOptions(this)">
+                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][category]" class="skill-category" onchange="updateSkillOptions(this)"<?php echo $roDis; ?>>
                                 <option value="">-- Выберите категорию --</option>
                                 <?php foreach ($skillCategories as $key => $label): ?>
                                     <option value="<?php echo $key; ?>" <?php echo (isset($skill['category']) && $skill['category'] == $key) ? 'selected' : ''; ?>>
@@ -89,7 +92,7 @@ foreach ($skillsList as $skill) {
                         </div>
                         <div class="skill-name-wrapper">
                             <label>Навык:</label>
-                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][skill_id]" class="skill-select" data-category="<?php echo isset($skill['category']) ? htmlspecialchars($skill['category']) : ''; ?>">
+                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][skill_id]" class="skill-select" data-category="<?php echo isset($skill['category']) ? htmlspecialchars($skill['category']) : ''; ?>"<?php echo $roDis; ?>>
                                 <option value="">-- Выберите навык --</option>
                                 <?php 
                                 $currentCategory = isset($skill['category']) ? $skill['category'] : '';
@@ -104,11 +107,11 @@ foreach ($skillsList as $skill) {
                                 endif; 
                                 ?>
                             </select>
-                            <input type="text" class="skill-custom-input" name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][skill_custom]" value="<?php echo isset($skill['skill_custom']) ? htmlspecialchars($skill['skill_custom']) : ''; ?>" placeholder="Или введите свой навык" style="<?php echo (isset($skill['skill_custom']) && !empty($skill['skill_custom'])) ? '' : 'display:none;'; ?>">
+                            <input type="text" class="skill-custom-input" name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][skill_custom]" value="<?php echo isset($skill['skill_custom']) ? htmlspecialchars($skill['skill_custom']) : ''; ?>" placeholder="Или введите свой навык" style="<?php echo (isset($skill['skill_custom']) && !empty($skill['skill_custom'])) ? '' : 'display:none;'; ?>"<?php echo $ro; ?>>
                         </div>
                         <div class="skill-level-wrapper">
                             <label>Уровень:</label>
-                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][level]" class="skill-level">
+                            <select name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][level]" class="skill-level"<?php echo $roDis; ?>>
                                 <option value="">-- Выберите уровень --</option>
                                 <?php foreach ($skillLevels as $key => $label): ?>
                                     <option value="<?php echo $key; ?>" <?php echo (isset($skill['level']) && $skill['level'] == $key) ? 'selected' : ''; ?>>
@@ -117,17 +120,17 @@ foreach ($skillsList as $skill) {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <button type="button" class="btn-remove-skill" onclick="removeSkill(this)">✕</button>
+                        <?php if (!$readOnly): ?><button type="button" class="btn-remove-skill" onclick="removeSkill(this)">✕</button><?php endif; ?>
                     </div>
                     <div class="skill-comment-wrapper">
                         <label>Комментарий:</label>
-                        <textarea name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][comment]" class="skill-comment" placeholder="Дополнительная информация о навыке..." rows="2"><?php echo isset($skill['comment']) ? htmlspecialchars($skill['comment']) : ''; ?></textarea>
+                        <textarea name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][comment]" class="skill-comment" placeholder="Дополнительная информация о навыке..." rows="2"<?php echo $ro; ?>><?php echo isset($skill['comment']) ? htmlspecialchars($skill['comment']) : ''; ?></textarea>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
-    <button type="button" class="btn-add-skill" onclick="addSkill('<?php echo htmlspecialchars($paramName); ?>')">+ Добавить навык</button>
+    <?php if (!$readOnly): ?><button type="button" class="btn-add-skill" onclick="addSkill('<?php echo htmlspecialchars($paramName); ?>')">+ Добавить навык</button><?php endif; ?>
 </div>
 
 <script>

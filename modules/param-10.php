@@ -3,6 +3,9 @@
 $paramData = isset($paramData) ? $paramData : ['structured_data' => [], 'free_text' => ''];
 $structured = $paramData['structured_data'] ?? [];
 $freeText = $paramData['free_text'] ?? '';
+$readOnly = isset($readOnly) ? $readOnly : false;
+$ro = $readOnly ? ' readonly' : '';
+$roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_10"><span class="param-name">10. Физиологические ресурсы</span></label>
@@ -23,7 +26,7 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>Общее состояние здоровья:</label>
-                <select name="param_10_health_status" id="param_10_health_status">
+                <select name="param_10_health_status" id="param_10_health_status"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="excellent" <?php echo (isset($structured['health_status']) && $structured['health_status'] == 'excellent') ? 'selected' : ''; ?>>Отличное</option>
                     <option value="good" <?php echo (isset($structured['health_status']) && $structured['health_status'] == 'good') ? 'selected' : ''; ?>>Хорошее</option>
@@ -33,7 +36,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>Энергетический уровень:</label>
-                <select name="param_10_energy_level" id="param_10_energy_level">
+                <select name="param_10_energy_level" id="param_10_energy_level"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="very_high" <?php echo (isset($structured['energy_level']) && $structured['energy_level'] == 'very_high') ? 'selected' : ''; ?>>Очень высокий</option>
                     <option value="high" <?php echo (isset($structured['energy_level']) && $structured['energy_level'] == 'high') ? 'selected' : ''; ?>>Высокий</option>
@@ -43,7 +46,7 @@ $freeText = $paramData['free_text'] ?? '';
             </div>
             <div class="field-group">
                 <label>Выносливость:</label>
-                <select name="param_10_endurance" id="param_10_endurance">
+                <select name="param_10_endurance" id="param_10_endurance"<?php echo $roDis; ?>>
                     <option value="">-- Выберите --</option>
                     <option value="very_high" <?php echo (isset($structured['endurance']) && $structured['endurance'] == 'very_high') ? 'selected' : ''; ?>>Очень высокая</option>
                     <option value="high" <?php echo (isset($structured['endurance']) && $structured['endurance'] == 'high') ? 'selected' : ''; ?>>Высокая</option>
@@ -55,13 +58,13 @@ $freeText = $paramData['free_text'] ?? '';
         <div class="field-row">
             <div class="field-group">
                 <label>
-                    <input type="checkbox" name="param_10_has_chronic" value="1" <?php echo (isset($structured['has_chronic']) && $structured['has_chronic']) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_10_has_chronic" value="1" <?php echo (isset($structured['has_chronic']) && $structured['has_chronic']) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Есть хронические заболевания
                 </label>
             </div>
             <div class="field-group">
                 <label>
-                    <input type="checkbox" name="param_10_regular_sport" value="1" <?php echo (isset($structured['regular_sport']) && $structured['regular_sport']) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="param_10_regular_sport" value="1" <?php echo (isset($structured['regular_sport']) && $structured['regular_sport']) ? 'checked' : ''; ?><?php echo $roDis; ?>>
                     Регулярные занятия спортом
                 </label>
             </div>
@@ -69,5 +72,5 @@ $freeText = $paramData['free_text'] ?? '';
     </div>
     
     <label for="param_10_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
-    <textarea name="param_10_free_text" id="param_10_free_text"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <textarea name="param_10_free_text" id="param_10_free_text"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
 </div>

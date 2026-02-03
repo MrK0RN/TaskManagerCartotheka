@@ -750,3 +750,35 @@
         gap: 4px;
     }
 }
+
+/* Режим просмотра: те же поля, но только для чтения */
+.view-mode input[readonly],
+.view-mode textarea[readonly] {
+    background: #f5f5f5;
+    cursor: default;
+    color: #333;
+}
+
+.view-mode select:disabled {
+    background: #f5f5f5;
+    cursor: default;
+    color: #333;
+    opacity: 1;
+}
+
+.view-mode input[type="checkbox"]:disabled {
+    cursor: default;
+}
+
+/* Скрываем кнопки «Добавить» и «Удалить» в режиме просмотра (на случай если где-то не передали $readOnly) */
+.view-mode .btn-add-education,
+.view-mode .btn-add-skill,
+.view-mode .btn-add-language {
+    display: none !important;
+}
+
+.view-mode .btn-remove-education,
+.view-mode .btn-remove-skill,
+.view-mode .btn-remove-language {
+    display: none !important;
+}
