@@ -96,6 +96,44 @@ def build_message(people: list, target_date: date, morning: bool, site_url: str 
     return "\n".join(lines)
 
 
+def build_tasks_message(tasks: list, target_date: date, morning: bool, site_url: str = "") -> str:
+    """Текст сообщения о задачах на сегодня/завтра."""
+    if morning:
+        header = "Задачи на сегодня:"
+    else:
+        header = "Задачи на завтра:"
+    if not tasks:
+        return header + "\n\nНет задач на эту дату."
+    lines = [header]
+    for t in tasks:
+        title = (t.get("title") or "Без названия").strip()
+        fio = (t.get("fio") or "").strip()
+        if fio:
+            lines.append(f"• {title} — {fio}")
+        else:
+            lines.append(f"• {title}")
+    if site_url:
+        lines.append(f"\n📎 Задачи: {site_url.rstrip('/')}/tasks.php")
+    return "\n".join(lines)
+
+
+def build_tasks_remind_message(tasks: list, site_url: str = "") -> str:
+    """Текст напоминания внести обновление по задачам за сегодня с прикреплённым человеком."""
+    if not tasks:
+        return ""
+    lines = [
+        "Напоминание: не забудьте внести обновление по задачам за сегодня, к которым прикреплены люди:",
+        "",
+    ]
+    for t in tasks:
+        title = (t.get("title") or "Без названия").strip()
+        fio = (t.get("fio") or "Без имени").strip()
+        lines.append(f"• {title} — {fio}")
+    if site_url:
+        lines.append(f"\n📎 Задачи: {site_url.rstrip('/')}/tasks.php")
+    return "\n".join(lines)
+
+
 async def send_notifications(morning: bool) -> None:
     if not TELEGRAM_BOT_TOKEN:
         raise SystemExit("Укажите TELEGRAM_BOT_TOKEN в .env")
@@ -114,13 +152,62 @@ async def send_notifications(morning: bool) -> None:
             logger.exception("Send to %s: %s", chat_id, e)
 
 
+async def send_tasks_notifications(morning: bool) -> None:
+    """Рассылка подписчикам о задачах на сегодня (утро) или завтра (вечер)."""
+    if not TELEGRAM_BOT_TOKEN:
+        raise SystemExit("Укажите TELEGRAM_BOT_TOKEN в .env")
+    target = get_target_date(morning)
+    tasks = db.get_tasks_due_on_date(target)
+    text = build_tasks_message(tasks, target, morning, site_url=SITE_URL)
+    subscribers = db.get_subscribers()
+    if not subscribers:
+        logger.info("Нет подписчиков, рассылка по задачам не выполняется.")
+        return
+    bot = Bot(token=TELEGRAM_BOT_TOKEN)
+    for chat_id in subscribers:
+        try:
+            await bot.send_message(chat_id=chat_id, text=text)
+        except Exception as e:
+            logger.exception("Send tasks to %s: %s", chat_id, e)
+
+
+async def send_tasks_remind() -> None:
+    """Рассылка напоминания внести обновление по сегодняшним задачам с прикреплённым человеком."""
+    if not TELEGRAM_BOT_TOKEN:
+        raise SystemExit("Укажите TELEGRAM_BOT_TOKEN в .env")
+    today = date.today()
+    tasks = db.get_tasks_with_assignee_due_on_date(today)
+    text = build_tasks_remind_message(tasks, site_url=SITE_URL)
+    if not text:
+        logger.info("Нет задач с исполнителем на сегодня, напоминание не отправляется.")
+        return
+    subscribers = db.get_subscribers()
+    if not subscribers:
+        logger.info("Нет подписчиков, рассылка не выполняется.")
+        return
+    bot = Bot(token=TELEGRAM_BOT_TOKEN)
+    for chat_id in subscribers:
+        try:
+            await bot.send_message(chat_id=chat_id, text=text)
+        except Exception as e:
+            logger.exception("Send tasks remind to %s: %s", chat_id, e)
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Рассылка уведомлений о ДР")
+    parser = argparse.ArgumentParser(description="Рассылка уведомлений о ДР и задачах")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--morning", action="store_true", help="8:00 — кто сегодня")
-    group.add_argument("--evening", action="store_true", help="20:00 — кто завтра")
+    group.add_argument("--morning", action="store_true", help="8:00 — ДР сегодня")
+    group.add_argument("--evening", action="store_true", help="20:00 — ДР завтра")
+    group.add_argument("--tasks-morning", action="store_true", help="8:00 — задачи на сегодня")
+    group.add_argument("--tasks-evening", action="store_true", help="20:00 — задачи на завтра")
+    group.add_argument("--tasks-remind", action="store_true", help="22:00 — напомнить внести обновление по задачам")
     args = parser.parse_args()
-    asyncio.run(send_notifications(morning=args.morning))
+    if args.morning or args.evening:
+        asyncio.run(send_notifications(morning=args.morning))
+    elif args.tasks_morning or args.tasks_evening:
+        asyncio.run(send_tasks_notifications(morning=args.tasks_morning))
+    elif args.tasks_remind:
+        asyncio.run(send_tasks_remind())
 
 
 if __name__ == "__main__":

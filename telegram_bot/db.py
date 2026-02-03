@@ -2,6 +2,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from config import get_db_connection_params
+from datetime import date
 
 
 def get_connection():
@@ -49,5 +50,47 @@ def get_birthdays_on_date(month: int, day: int):
                 ORDER BY fio
                 """,
                 (month, day),
+            )
+            return [dict(row) for row in cur.fetchall()]
+
+
+def get_tasks_due_on_date(due_date: date):
+    """
+    Задачи (и подзадачи) с due_date = due_date.
+    Возвращает список dict: id, title, due_date, portrait_id, fio (assignee_fio).
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT t.id, t.title, t.due_date, t.portrait_id,
+                       COALESCE(pd.structured_data->>'fio', '') AS fio
+                FROM tasks t
+                LEFT JOIN portrait_data pd ON pd.portrait_id = t.portrait_id AND pd.param_number = 1
+                WHERE t.due_date = %s
+                ORDER BY t.parent_id NULLS FIRST, t.sort_order, t.id
+                """,
+                (due_date,),
+            )
+            return [dict(row) for row in cur.fetchall()]
+
+
+def get_tasks_with_assignee_due_on_date(due_date: date):
+    """
+    Задачи с due_date = due_date и привязанным человеком (portrait_id IS NOT NULL).
+    Для напоминания «внести обновление».
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT t.id, t.title, t.due_date, t.portrait_id,
+                       COALESCE(pd.structured_data->>'fio', 'Без имени') AS fio
+                FROM tasks t
+                LEFT JOIN portrait_data pd ON pd.portrait_id = t.portrait_id AND pd.param_number = 1
+                WHERE t.due_date = %s AND t.portrait_id IS NOT NULL
+                ORDER BY t.parent_id NULLS FIRST, t.sort_order, t.id
+                """,
+                (due_date,),
             )
             return [dict(row) for row in cur.fetchall()]

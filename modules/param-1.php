@@ -9,11 +9,13 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_1"><span class="param-name">1. Базовые демографические данные</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Что указать:</strong> ФИО, дата рождения, возраст, пол, гражданство, место рождения и текущее место проживания.<br>
         <strong>Зачем это нужно:</strong> эти данные задают базовый контекст — культурную среду, поколенческие особенности, социальные условия формирования личности.<br>
         <strong>Совет:</strong> укажите не только факты, но и важные детали — например, «родился в маленьком городе, сейчас живёт в мегаполисе» или «переехал в другую страну в 25 лет».
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -57,6 +59,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_1_free_text" style="margin-top: 15px;">Дополнительные детали:</label>
     <textarea name="param_1_free_text" id="param_1_free_text" class="large"<?php echo $ro; ?> placeholder="ФИО: Иванов Иван Иванович&#10;Дата рождения: 15.03.1992&#10;Возраст: 32 года&#10;Пол: мужской&#10;Гражданство: РФ&#10;Место рождения: Екатеринбург&#10;Место проживания: Москва, район Хамовники"><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

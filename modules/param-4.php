@@ -9,6 +9,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_4"><span class="param-name">4. Профессиональная траектория</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Опишите:</strong>
         <ul>
@@ -20,6 +21,7 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Важные вопросы:</strong> почему выбрал эту профессию? Были ли неудачи на пути? Что ценит в работе больше всего (деньги, статус, творчество, стабильность)?
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -57,6 +59,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_4_free_text" style="margin-top: 15px;">Описание карьерной траектории:</label>
     <textarea name="param_4_free_text" id="param_4_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

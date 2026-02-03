@@ -10,6 +10,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_22"><span class="param-name">22. Паттерны в конфликтах</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Типичные стратегии разрешения конфликтов:</strong>
         <br><br>
@@ -22,6 +23,7 @@ $roDis = $readOnly ? ' disabled' : '';
             <li><strong>Паттерны в разных контекстах:</strong> ведёт ли себя одинаково с начальником, партнёром, друзьями?</li>
         </ul>
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="options-grid">
@@ -56,6 +58,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_22_free_text" style="margin-top: 15px;">Дополнительный анализ:</label>
     <textarea name="param_22_free_text" id="param_22_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

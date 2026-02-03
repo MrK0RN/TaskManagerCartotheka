@@ -8,6 +8,7 @@ $ro = $readOnly ? ' readonly' : '';
 ?>
 <div class="form-group">
     <label for="param_23"><span class="param-name">23. Привычки, ритуалы и распорядок</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Разберите по сферам жизни:</strong>
         <ul>
@@ -19,7 +20,10 @@ $ro = $readOnly ? ' readonly' : '';
         </ul>
         <strong>Важно:</strong> какие привычки поддерживают, а какие вредят? Есть ли зависимость от определённых ритуалов?
     </div>
+    <?php endif; ?>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_23_free_text">Описание привычек и распорядка:</label>
     <textarea name="param_23_free_text" id="param_23_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

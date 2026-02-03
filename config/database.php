@@ -25,6 +25,7 @@ class Database {
 
             $this->connection = new PDO($dsn, DB_USER, DB_PASS, $options);
             $this->ensureMeetingsTable();
+            $this->ensureTasksTable();
         } catch (PDOException $e) {
             throw new Exception("Ошибка подключения к базе данных: " . $e->getMessage());
         }
@@ -45,6 +46,31 @@ class Database {
         $this->connection->exec("
             CREATE INDEX IF NOT EXISTS idx_portrait_meetings_portrait_date
             ON portrait_meetings (portrait_id, meeting_date)
+        ");
+    }
+
+    /** Создаёт таблицу tasks при первом подключении, если её ещё нет */
+    private function ensureTasksTable() {
+        $this->connection->exec("
+            CREATE TABLE IF NOT EXISTS tasks (
+                id SERIAL PRIMARY KEY,
+                parent_id INT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+                title VARCHAR(500) NOT NULL DEFAULT '',
+                due_date DATE NULL,
+                portrait_id INT NULL REFERENCES portraits(id) ON DELETE SET NULL,
+                sort_order INT NOT NULL DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ");
+        $this->connection->exec("
+            CREATE INDEX IF NOT EXISTS idx_tasks_parent ON tasks (parent_id)
+        ");
+        $this->connection->exec("
+            CREATE INDEX IF NOT EXISTS idx_tasks_due_date ON tasks (due_date)
+        ");
+        $this->connection->exec("
+            CREATE INDEX IF NOT EXISTS idx_tasks_portrait ON tasks (portrait_id)
         ");
     }
 

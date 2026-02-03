@@ -8,6 +8,7 @@ $ro = $readOnly ? ' readonly' : '';
 ?>
 <div class="form-group">
     <label for="param_21"><span class="param-name">21. Ролевой репертуар</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Опишите поведение человека в ключевых ролях:</strong>
         <ul>
@@ -27,7 +28,10 @@ $ro = $readOnly ? ' readonly' : '';
             <li>Какие роли самые значимые для самооценки?</li>
         </ul>
     </div>
+    <?php endif; ?>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_21_free_text">Описание ролевого репертуара:</label>
     <textarea name="param_21_free_text" id="param_21_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

@@ -15,7 +15,12 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 
 from config import TELEGRAM_BOT_TOKEN, SITE_URL
 import db
-from notify import build_message, get_target_date
+from notify import (
+    build_message,
+    build_tasks_message,
+    build_tasks_remind_message,
+    get_target_date,
+)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -32,14 +37,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         is_new = db.subscribe_chat(chat_id)
         if is_new:
             await update.message.reply_text(
-                "Вы подписаны на уведомления о днях рождения.\n\n"
-                "Каждый день в 8:00 — кто отмечает ДР сегодня.\n"
-                "Каждый день в 20:00 — у кого ДР завтра.\n\n"
-                "Команды: /morning — кто сегодня, /evening — кто завтра."
+                "Вы подписаны на уведомления.\n\n"
+                "Дни рождения: в 8:00 — кто сегодня, в 20:00 — кто завтра.\n"
+                "Задачи: в 8:00 — на сегодня, в 20:00 — на завтра; в 22:00 — напоминание внести обновление по задачам с прикреплённым человеком.\n\n"
+                "Команды: /morning — ДР и задачи на сегодня, /evening — ДР и задачи на завтра."
             )
         else:
             await update.message.reply_text(
-                "Вы уже подписаны на уведомления о днях рождения."
+                "Вы уже подписаны на уведомления (ДР и задачи)."
             )
     except Exception as e:
         logger.exception("Subscribe error")
@@ -47,46 +52,82 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def morning(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Утреннее сообщение: кто сегодня отмечает ДР."""
+    """Утреннее сообщение: кто сегодня ДР + задачи на сегодня."""
     try:
         target = get_target_date(morning=True)
         people = db.get_birthdays_on_date(target.month, target.day)
         text = build_message(people, target, morning=True, site_url=SITE_URL)
         await update.message.reply_text(text)
+        tasks = db.get_tasks_due_on_date(target)
+        text_tasks = build_tasks_message(tasks, target, morning=True, site_url=SITE_URL)
+        await update.message.reply_text(text_tasks)
     except Exception as e:
         logger.exception("Morning command error")
         await update.message.reply_text("Ошибка. Попробуйте позже.")
 
 
 async def evening(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Вечернее сообщение: у кого завтра ДР."""
+    """Вечернее сообщение: у кого завтра ДР + задачи на завтра."""
     try:
         target = get_target_date(morning=False)
         people = db.get_birthdays_on_date(target.month, target.day)
         text = build_message(people, target, morning=False, site_url=SITE_URL)
         await update.message.reply_text(text)
+        tasks = db.get_tasks_due_on_date(target)
+        text_tasks = build_tasks_message(tasks, target, morning=False, site_url=SITE_URL)
+        await update.message.reply_text(text_tasks)
     except Exception as e:
         logger.exception("Evening command error")
         await update.message.reply_text("Ошибка. Попробуйте позже.")
 
 
 async def _send_scheduled(context: ContextTypes.DEFAULT_TYPE, morning: bool) -> None:
-    """Рассылка по расписанию: утро 8:00 (сегодня) или вечер 20:00 (завтра)."""
+    """Рассылка по расписанию: утро 8:00 (сегодня) или вечер 20:00 (завтра). ДР + задачи."""
     try:
         target = get_target_date(morning=morning)
-        people = db.get_birthdays_on_date(target.month, target.day)
-        text = build_message(people, target, morning, site_url=SITE_URL)
         subscribers = db.get_subscribers()
         if not subscribers:
             logger.info("Нет подписчиков, рассылка не выполняется.")
             return
+        people = db.get_birthdays_on_date(target.month, target.day)
+        text = build_message(people, target, morning, site_url=SITE_URL)
         for chat_id in subscribers:
             try:
                 await context.bot.send_message(chat_id=chat_id, text=text)
             except Exception as e:
                 logger.exception("Send to %s: %s", chat_id, e)
+        tasks = db.get_tasks_due_on_date(target)
+        text_tasks = build_tasks_message(tasks, target, morning, site_url=SITE_URL)
+        for chat_id in subscribers:
+            try:
+                await context.bot.send_message(chat_id=chat_id, text=text_tasks)
+            except Exception as e:
+                logger.exception("Send tasks to %s: %s", chat_id, e)
     except Exception as e:
         logger.exception("Scheduled notification error: %s", e)
+
+
+async def job_tasks_remind(context: ContextTypes.DEFAULT_TYPE) -> None:
+    """22:00 — напоминание внести обновление по сегодняшним задачам с прикреплённым человеком."""
+    try:
+        from datetime import date
+
+        today = date.today()
+        tasks = db.get_tasks_with_assignee_due_on_date(today)
+        text = build_tasks_remind_message(tasks, site_url=SITE_URL)
+        if not text:
+            logger.info("Нет задач с исполнителем на сегодня, напоминание не отправляется.")
+            return
+        subscribers = db.get_subscribers()
+        if not subscribers:
+            return
+        for chat_id in subscribers:
+            try:
+                await context.bot.send_message(chat_id=chat_id, text=text)
+            except Exception as e:
+                logger.exception("Send tasks remind to %s: %s", chat_id, e)
+    except Exception as e:
+        logger.exception("Tasks remind job error: %s", e)
 
 
 async def job_morning(context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -100,7 +141,10 @@ async def job_evening(context: ContextTypes.DEFAULT_TYPE) -> None:
 def main() -> None:
     if not TELEGRAM_BOT_TOKEN:
         raise SystemExit("Укажите TELEGRAM_BOT_TOKEN в .env")
-    logger.info("Запуск бота... Команды: /start, /morning, /evening. Рассылка: 8:00 и 20:00 МСК")
+    logger.info(
+        "Запуск бота... Команды: /start, /morning, /evening. "
+        "Рассылка: 8:00 и 20:00 (ДР + задачи), 22:00 (напоминание по задачам) МСК"
+    )
     app = (
         Application.builder()
         .token(TELEGRAM_BOT_TOKEN)
@@ -127,16 +171,18 @@ def main() -> None:
 
 
 async def _setup_jobs(application: Application) -> None:
-    """Регистрация ежедневных рассылок в 8:00 и 20:00 по Москве."""
+    """Регистрация ежедневных рассылок в 8:00, 20:00 и 22:00 по Москве."""
     job_queue = application.job_queue
     if job_queue is None:
         logger.warning("Job queue недоступен, рассылка по расписанию отключена")
         return
     time_08 = time(8, 0, tzinfo=MOSCOW)
     time_20 = time(20, 0, tzinfo=MOSCOW)
+    time_22 = time(22, 0, tzinfo=MOSCOW)
     job_queue.run_daily(job_morning, time=time_08)
     job_queue.run_daily(job_evening, time=time_20)
-    logger.info("Рассылка запланирована: 8:00 и 20:00 (Europe/Moscow)")
+    job_queue.run_daily(job_tasks_remind, time=time_22)
+    logger.info("Рассылка запланирована: 8:00, 20:00 и 22:00 (Europe/Moscow)")
 
 
 if __name__ == "__main__":

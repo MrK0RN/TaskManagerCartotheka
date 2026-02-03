@@ -9,6 +9,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_10"><span class="param-name">10. Физиологические ресурсы</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Оцените объективно:</strong>
         <ul>
@@ -21,6 +22,7 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Важно:</strong> как здоровье влияет на качество жизни и возможности? Есть ли ресурсы для улучшения (спортзал, врач, время)?
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -71,6 +73,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_10_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
     <textarea name="param_10_free_text" id="param_10_free_text"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

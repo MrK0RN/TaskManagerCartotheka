@@ -23,6 +23,7 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Пример:</strong> «Сильная профессиональная идентичность (инженер) — гордится профессией. Слабая национальная идентичность — не чувствует связи с культурой предков».
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="options-grid">
@@ -65,6 +66,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_19_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
     <textarea name="param_19_free_text" id="param_19_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

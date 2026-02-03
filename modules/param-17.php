@@ -21,6 +21,7 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Важно:</strong> насколько эти убеждения осознаны? Менялись ли они со временем?
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -45,6 +46,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_17_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
     <textarea name="param_17_free_text" id="param_17_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

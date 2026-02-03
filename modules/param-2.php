@@ -9,6 +9,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_2"><span class="param-name">2. Семейное положение и структура</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Что указать:</strong> наличие партнёра (статус отношений), детей (возраст, количество), близких родственников, тип семьи.<br>
         <strong>Важно описать:</strong>
@@ -20,6 +21,7 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Пример:</strong> «В браке 8 лет, двое детей (6 и 10 лет). Близкие отношения с родителями, живущими в другом городе. Старшая сестра — опора в трудных ситуациях».
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -54,8 +56,10 @@ $roDis = $readOnly ? ' disabled' : '';
         <?php if (!$readOnly): ?><button type="button" class="btn" onclick="addChildAge()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">+ Добавить возраст ребенка</button><?php endif; ?>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_2_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
     <textarea name="param_2_free_text" id="param_2_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>
 <?php if (!$readOnly): ?>
 <script>

@@ -9,6 +9,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_12"><span class="param-name">12. Темперамент и эмоциональная регуляция</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Что описать:</strong>
         <ul>
@@ -20,6 +21,7 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Наблюдайте:</strong> вспыльчивый или сдержанный? Долго ли держит обиду? Как проявляется радость, грусть, гнев?
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -57,6 +59,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_12_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
     <textarea name="param_12_free_text" id="param_12_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

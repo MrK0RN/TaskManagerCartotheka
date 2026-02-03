@@ -8,6 +8,7 @@ $ro = $readOnly ? ' readonly' : '';
 ?>
 <div class="form-group">
     <label for="param_25"><span class="param-name">25. Зоны роста и внутренние противоречия</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Нереализованный потенциал:</strong>
         <ul>
@@ -40,7 +41,10 @@ $ro = $readOnly ? ' readonly' : '';
         </ul>
         <strong>Важно:</strong> этот пункт — не критика, а карта возможностей для развития.
     </div>
+    <?php endif; ?>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_25_free_text">Анализ зон роста и противоречий:</label>
     <textarea name="param_25_free_text" id="param_25_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

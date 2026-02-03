@@ -9,6 +9,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_18"><span class="param-name">18. Жизненные цели и смысложизненные ориентиры</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Структурируйте по временным горизонтам:</strong>
         <ul>
@@ -26,6 +27,7 @@ $roDis = $readOnly ? ' disabled' : '';
             <li>Есть ли ощущение «призвания» или «миссии»?</li>
         </ul>
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -50,6 +52,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_18_free_text" style="margin-top: 15px;">Цели и ориентиры:</label>
     <textarea name="param_18_free_text" id="param_18_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

@@ -10,6 +10,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_16"><span class="param-name">16. Базовые ценности и приоритеты</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Составьте иерархию (от самого важного):</strong>
         <br><br>
@@ -22,6 +23,7 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Пример:</strong> «Семья на первом месте — ради детей готов отказаться от повышения, если это потребует переезда. Свобода важнее денег — не будет работать в месте, где нет автономии».
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="options-grid">
@@ -72,6 +74,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_16_free_text" style="margin-top: 15px;">Иерархия и анализ:</label>
     <textarea name="param_16_free_text" id="param_16_free_text" class="large"<?php echo $ro; ?> placeholder="Иерархия ценностей:&#10;1. Семья&#10;2. Здоровье&#10;3. Свобода&#10;4. Друзья&#10;5. Творчество&#10;&#10;Анализ..."><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

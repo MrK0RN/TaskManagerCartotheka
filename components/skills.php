@@ -19,6 +19,15 @@ $skillLevels = [
     'basic' => 'Базовый'
 ];
 
+function skill_item_has_content($skill) {
+    $fields = ['category', 'skill_id', 'skill_custom', 'level', 'comment'];
+    foreach ($fields as $f) {
+        $v = isset($skill[$f]) ? $skill[$f] : '';
+        if (trim((string) $v) !== '') return true;
+    }
+    return false;
+}
+
 // Получаем список навыков из БД
 $skillsList = [];
 try {
@@ -41,6 +50,7 @@ foreach ($skillsList as $skill) {
 <div class="skills-component" data-param-name="<?php echo htmlspecialchars($paramName); ?>">
     <div class="skills-list" id="skills-list-<?php echo htmlspecialchars($paramName); ?>">
         <?php if (empty($savedSkills)): ?>
+            <?php if (!$readOnly): ?>
             <div class="skill-item" data-index="0">
                 <div class="skill-row">
                     <div class="skill-category-wrapper">
@@ -75,8 +85,10 @@ foreach ($skillsList as $skill) {
                     <textarea name="<?php echo htmlspecialchars($paramName); ?>[0][comment]" class="skill-comment" placeholder="Дополнительная информация о навыке..." rows="2"<?php echo $ro; ?>></textarea>
                 </div>
             </div>
+            <?php endif; ?>
         <?php else: ?>
             <?php foreach ($savedSkills as $index => $skill): ?>
+                <?php if ($readOnly && !skill_item_has_content($skill)) continue; ?>
                 <div class="skill-item" data-index="<?php echo $index; ?>">
                     <div class="skill-row">
                         <div class="skill-category-wrapper">
@@ -122,10 +134,12 @@ foreach ($skillsList as $skill) {
                         </div>
                         <?php if (!$readOnly): ?><button type="button" class="btn-remove-skill" onclick="removeSkill(this)">✕</button><?php endif; ?>
                     </div>
+                    <?php if (!$readOnly || trim(isset($skill['comment']) ? $skill['comment'] : '') !== ''): ?>
                     <div class="skill-comment-wrapper">
                         <label>Комментарий:</label>
                         <textarea name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][comment]" class="skill-comment" placeholder="Дополнительная информация о навыке..." rows="2"<?php echo $ro; ?>><?php echo isset($skill['comment']) ? htmlspecialchars($skill['comment']) : ''; ?></textarea>
                     </div>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>

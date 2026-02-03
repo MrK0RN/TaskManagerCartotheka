@@ -9,6 +9,7 @@ $ro = $readOnly ? ' readonly' : '';
 ?>
 <div class="form-group">
     <label for="param_3"><span class="param-name">3. Образовательный маршрут</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Что включить:</strong>
         <ul>
@@ -20,6 +21,7 @@ $ro = $readOnly ? ' readonly' : '';
         </ul>
         <strong>Анализируйте:</strong> как образование повлияло на мировоззрение? Были ли переломы (смена специальности)? Какие предметы давались легко/трудно и почему?
     </div>
+    <?php endif; ?>
     
     <?php
     $educationItems = $educationItems;
@@ -27,6 +29,8 @@ $ro = $readOnly ? ' readonly' : '';
     include COMPONENTS_PATH . '/education.php';
     ?>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_3_free_text" style="margin-top: 15px;">Дополнительные детали:</label>
     <textarea name="param_3_free_text" id="param_3_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

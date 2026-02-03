@@ -9,6 +9,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_13"><span class="param-name">13. Когнитивный стиль</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Проанализируйте:</strong>
         <ul>
@@ -20,6 +21,7 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Пример:</strong> «Визуал, предпочитает схемы и картинки. Решения принимает медленно, но взвешенно. Любит глубокие размышления о смысле жизни».
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -57,6 +59,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_13_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
     <textarea name="param_13_free_text" id="param_13_free_text" class="large"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

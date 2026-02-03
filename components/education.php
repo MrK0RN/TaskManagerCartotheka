@@ -15,6 +15,15 @@ $educationTypes = [
     'self' => 'Самообразование'
 ];
 
+function education_item_has_content($edu) {
+    $fields = ['type', 'institution', 'specialization', 'year_from', 'year_to', 'details'];
+    foreach ($fields as $f) {
+        $v = isset($edu[$f]) ? $edu[$f] : '';
+        if (trim((string) $v) !== '') return true;
+    }
+    return false;
+}
+
 // Получаем список учреждений из БД
 $institutionsList = [];
 try {
@@ -31,6 +40,7 @@ try {
 <div class="education-component" data-param-name="<?php echo htmlspecialchars($paramName); ?>">
     <div class="education-list" id="education-list-<?php echo htmlspecialchars($paramName); ?>">
         <?php if (empty($savedEducation)): ?>
+            <?php if (!$readOnly): ?>
             <div class="education-item" data-index="0">
                 <div class="education-row">
                     <div class="education-type-wrapper">
@@ -55,7 +65,7 @@ try {
                         <label>Специализация:</label>
                         <input type="text" name="<?php echo htmlspecialchars($paramName); ?>[0][specialization]" class="specialization-input" placeholder="Специализация/направление"<?php echo $ro; ?>>
                     </div>
-                    <?php if (!$readOnly): ?><button type="button" class="btn-remove-education" onclick="removeEducation(this)" style="display:none;">✕</button><?php endif; ?>
+                    <button type="button" class="btn-remove-education" onclick="removeEducation(this)" style="display:none;">✕</button>
                 </div>
                 <div class="education-dates">
                     <div class="date-from">
@@ -72,8 +82,10 @@ try {
                     <textarea name="<?php echo htmlspecialchars($paramName); ?>[0][details]" class="education-details-textarea" placeholder="Дополнительная информация об образовании..." rows="2"<?php echo $ro; ?>></textarea>
                 </div>
             </div>
+            <?php endif; ?>
         <?php else: ?>
             <?php foreach ($savedEducation as $index => $edu): ?>
+                <?php if ($readOnly && !education_item_has_content($edu)) continue; ?>
                 <div class="education-item" data-index="<?php echo $index; ?>">
                     <div class="education-row">
                         <div class="education-type-wrapper">
@@ -112,10 +124,12 @@ try {
                             <input type="number" name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][year_to]" class="year-input" value="<?php echo isset($edu['year_to']) ? htmlspecialchars($edu['year_to']) : ''; ?>" placeholder="ГГГГ" min="1950" max="<?php echo date('Y') + 10; ?>"<?php echo $ro; ?>>
                         </div>
                     </div>
+                    <?php if (!$readOnly || trim(isset($edu['details']) ? $edu['details'] : '') !== ''): ?>
                     <div class="education-details">
                         <label>Дополнительные детали:</label>
                         <textarea name="<?php echo htmlspecialchars($paramName); ?>[<?php echo $index; ?>][details]" class="education-details-textarea" placeholder="Дополнительная информация об образовании..." rows="2"<?php echo $ro; ?>><?php echo isset($edu['details']) ? htmlspecialchars($edu['details']) : ''; ?></textarea>
                     </div>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>

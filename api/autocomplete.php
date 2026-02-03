@@ -98,6 +98,20 @@ try {
             $stmt->execute([':query' => '%' . $query . '%']);
             $results = $stmt->fetchAll();
             break;
+
+        case 'portrait':
+            $stmt = $db->prepare("
+                SELECT pd.portrait_id AS id,
+                       COALESCE(pd.structured_data->>'fio', 'Без имени') AS name
+                FROM portrait_data pd
+                WHERE pd.param_number = 1
+                  AND (pd.structured_data->>'fio') ILIKE :query
+                ORDER BY name
+                LIMIT 20
+            ");
+            $stmt->execute([':query' => '%' . $query . '%']);
+            $results = $stmt->fetchAll();
+            break;
             
         default:
             $response['message'] = 'Неизвестный тип поиска';

@@ -105,7 +105,7 @@ $sections = [
                 <?php endforeach; ?>
 
                 <div class="btn-container">
-                    <button type="button" class="btn" onclick="saveForm()">💾 Сохранить портрет</button>
+                    <button type="button" class="btn btn-primary" onclick="saveForm()">Сохранить портрет</button>
                 </div>
             </form>
         </div>

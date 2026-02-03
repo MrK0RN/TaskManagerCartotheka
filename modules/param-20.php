@@ -9,6 +9,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_20"><span class="param-name">20. Коммуникативный стиль</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Проанализируйте по измерениям:</strong>
         <ul>
@@ -21,6 +22,7 @@ $roDis = $readOnly ? ' disabled' : '';
         <strong>Вербальные паттерны:</strong> словарный запас, темп речи, использование вопросов, утверждений, историй, склонность к спорам.<br>
         <strong>Невербальные паттерны:</strong> контакт глазами, жесты, поза, дистанция в общении.
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -73,6 +75,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_20_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
     <textarea name="param_20_free_text" id="param_20_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

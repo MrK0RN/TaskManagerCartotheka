@@ -84,6 +84,11 @@ $statusText = $portrait['status'] === 'completed' ? 'Завершён' : 'Чер
                         <?php foreach ($section['params'] as $paramNumber): ?>
                             <?php
                             $paramData = isset($portraitData[$paramNumber]) ? $portraitData[$paramNumber] : ['structured_data' => [], 'free_text' => ''];
+                            $paramStructured = $paramData['structured_data'] ?? [];
+                            $paramFreeText = $paramData['free_text'] ?? '';
+                            if ($readOnly && !param_has_content($paramStructured, $paramFreeText)) {
+                                continue;
+                            }
                             $moduleFile = MODULES_PATH . '/param-' . $paramNumber . '.php';
                             if (file_exists($moduleFile)) {
                                 include $moduleFile;

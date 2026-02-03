@@ -10,6 +10,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_15"><span class="param-name">15. Мотивационная структура</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Определите ведущие драйверы (выберите 3-5 главных):</strong>
         <br><br>
@@ -20,6 +21,7 @@ $roDis = $readOnly ? ' disabled' : '';
             <li>Как изменились мотивы с возрастом?</li>
         </ul>
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="options-grid">
@@ -70,6 +72,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_15_free_text" style="margin-top: 15px;">Дополнительный анализ:</label>
     <textarea name="param_15_free_text" id="param_15_free_text"<?php echo $ro; ?> placeholder="Ведущие мотивы: автономия, мастерство, творчество&#10;&#10;Дополнительный анализ..."><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

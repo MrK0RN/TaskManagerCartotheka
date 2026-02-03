@@ -9,6 +9,7 @@ $roDis = $readOnly ? ' disabled' : '';
 ?>
 <div class="form-group">
     <label for="param_6"><span class="param-name">6. Потенциальные материальные ресурсы</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Рассмотрите:</strong>
         <ul>
@@ -20,6 +21,7 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Вопросы для размышления:</strong> на что человек может рассчитывать в будущем? Есть ли «подушка безопасности»? Какие возможности пока не используются?
     </div>
+    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
@@ -58,6 +60,8 @@ $roDis = $readOnly ? ' disabled' : '';
         </div>
     </div>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_6_free_text" style="margin-top: 15px;">Дополнительная информация:</label>
     <textarea name="param_6_free_text" id="param_6_free_text"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>

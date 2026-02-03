@@ -8,6 +8,7 @@ $ro = $readOnly ? ' readonly' : '';
 ?>
 <div class="form-group">
     <label for="param_24"><span class="param-name">24. Ключевые жизненные события</span></label>
+    <?php if (!$readOnly): ?>
     <div class="help-text">
         <strong>Составьте хронологию переломных моментов:</strong>
         <ul>
@@ -25,7 +26,10 @@ $ro = $readOnly ? ' readonly' : '';
         </ul>
         <strong>Совет:</strong> не просто перечислите события, а опишите их психологическое воздействие.
     </div>
+    <?php endif; ?>
     
+    <?php if (!$readOnly || trim($freeText) !== ''): ?>
     <label for="param_24_free_text">Хронология и анализ событий:</label>
     <textarea name="param_24_free_text" id="param_24_free_text" class="xlarge"<?php echo $ro; ?>><?php echo htmlspecialchars($freeText); ?></textarea>
+    <?php endif; ?>
 </div>
