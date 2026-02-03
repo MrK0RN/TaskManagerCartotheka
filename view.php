@@ -68,7 +68,10 @@ $statusText = $portrait['status'] === 'completed' ? 'Завершён' : 'Чер
         <?php include COMPONENTS_PATH . '/header.php'; ?>
 
         <div class="form-container view-mode">
-            <p class="form-back-link"><a href="list.php">← Вернуться к списку</a></p>
+            <p class="form-back-link">
+                <a href="list.php">← Вернуться к списку</a>
+                <a href="meetings.php?id=<?php echo (int)$portraitId; ?>" class="btn btn-outline">Встречи с этим человеком</a>
+            </p>
 
             <div id="personalityView">
                 <?php foreach ($sections as $sectionIndex => $section): ?>
@@ -94,6 +97,7 @@ $statusText = $portrait['status'] === 'completed' ? 'Завершён' : 'Чер
                 <?php endforeach; ?>
 
                 <div class="btn-container">
+                    <a href="meetings.php?id=<?php echo (int)$portraitId; ?>" class="btn btn-outline">Встречи с этим человеком</a>
                     <a href="index.php?id=<?php echo (int)$portraitId; ?>" class="btn btn-primary">Редактировать портрет</a>
                 </div>
             </div>

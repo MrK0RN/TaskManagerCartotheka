@@ -28,6 +28,17 @@ CREATE TABLE IF NOT EXISTS portrait_data (
     INDEX idx_param (param_number)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Встречи по портрету (человеку)
+CREATE TABLE IF NOT EXISTS portrait_meetings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    portrait_id INT NOT NULL,
+    meeting_date DATE NOT NULL,
+    with_whom VARCHAR(255) DEFAULT '',
+    description TEXT,
+    FOREIGN KEY (portrait_id) REFERENCES portraits(id) ON DELETE CASCADE,
+    INDEX idx_portrait_meetings_portrait_date (portrait_id, meeting_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Справочник языков
 CREATE TABLE IF NOT EXISTS languages (
     id INT AUTO_INCREMENT PRIMARY KEY,

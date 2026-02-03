@@ -42,6 +42,16 @@ CREATE TRIGGER portraits_updated_at
 CREATE TRIGGER portrait_data_updated_at
     BEFORE UPDATE ON portrait_data FOR EACH ROW EXECUTE PROCEDURE set_updated_at();
 
+-- Встречи по портрету (человеку)
+CREATE TABLE portrait_meetings (
+    id SERIAL PRIMARY KEY,
+    portrait_id INT NOT NULL REFERENCES portraits(id) ON DELETE CASCADE,
+    meeting_date DATE NOT NULL,
+    with_whom VARCHAR(255) DEFAULT '',
+    description TEXT DEFAULT ''
+);
+CREATE INDEX idx_portrait_meetings_portrait_date ON portrait_meetings (portrait_id, meeting_date);
+
 -- Справочник языков
 CREATE TABLE languages (
     id SERIAL PRIMARY KEY,

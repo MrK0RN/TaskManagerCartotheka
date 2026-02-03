@@ -751,6 +751,15 @@
     }
 }
 
+/* Верхняя строка просмотра: ссылка влево, кнопка встречи вправо */
+.view-mode .form-back-link {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
 /* Режим просмотра: те же поля, но только для чтения */
 .view-mode input[readonly],
 .view-mode textarea[readonly] {
@@ -781,4 +790,86 @@
 .view-mode .btn-remove-skill,
 .view-mode .btn-remove-language {
     display: none !important;
+}
+
+/* Страница встреч */
+.meetings-page .form-back-link {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.meetings-view-link {
+    margin-left: 8px;
+}
+
+.meetings-title {
+    margin: 0 0 24px;
+    font-size: 1.5rem;
+    color: var(--dark);
+}
+
+.meetings-form-wrap {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #eee;
+}
+
+.meetings-form .form-group {
+    margin-bottom: 16px;
+}
+
+.meetings-form .btn-container {
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+.meetings-list-title {
+    margin: 0 0 16px;
+    font-size: 1.2rem;
+    color: var(--dark);
+}
+
+.meetings-loading {
+    color: var(--gray);
+    padding: 16px 0;
+}
+
+.meetings-empty {
+    color: var(--gray);
+    padding: 16px 0;
+}
+
+.meetings-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.meeting-item {
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #f8f9fa;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary);
+}
+
+.meeting-item-date {
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 6px;
+}
+
+.meeting-item-with {
+    font-size: 0.95rem;
+    color: var(--gray);
+    margin-bottom: 4px;
+}
+
+.meeting-item-desc {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--dark);
+    white-space: pre-wrap;
 }

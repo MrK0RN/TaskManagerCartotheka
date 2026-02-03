@@ -24,9 +24,28 @@ class Database {
             ];
 
             $this->connection = new PDO($dsn, DB_USER, DB_PASS, $options);
+            $this->ensureMeetingsTable();
         } catch (PDOException $e) {
             throw new Exception("Ошибка подключения к базе данных: " . $e->getMessage());
         }
+    }
+
+    /** Создаёт таблицу portrait_meetings при первом подключении, если её ещё нет */
+    private function ensureMeetingsTable() {
+        $sql = "
+            CREATE TABLE IF NOT EXISTS portrait_meetings (
+                id SERIAL PRIMARY KEY,
+                portrait_id INT NOT NULL REFERENCES portraits(id) ON DELETE CASCADE,
+                meeting_date DATE NOT NULL,
+                with_whom VARCHAR(255) DEFAULT '',
+                description TEXT DEFAULT ''
+            )
+        ";
+        $this->connection->exec($sql);
+        $this->connection->exec("
+            CREATE INDEX IF NOT EXISTS idx_portrait_meetings_portrait_date
+            ON portrait_meetings (portrait_id, meeting_date)
+        ");
     }
 
     public static function getInstance() {
