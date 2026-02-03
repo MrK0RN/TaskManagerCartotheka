@@ -36,5 +36,20 @@ services:
       timeout: 5s
       retries: 5
 
+  telegram-bot:
+    build: ./telegram_bot
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      SITE_URL: ${SITE_URL:-http://localhost:8081}
+      DB_HOST: db
+      DB_PORT: "5433"
+      DB_NAME: portrait_db
+      DB_USER: portrait_user
+      DB_PASS: portrait_pass
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   postgres_data:

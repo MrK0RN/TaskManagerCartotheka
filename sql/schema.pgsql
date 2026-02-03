@@ -52,6 +52,12 @@ CREATE TABLE portrait_meetings (
 );
 CREATE INDEX idx_portrait_meetings_portrait_date ON portrait_meetings (portrait_id, meeting_date);
 
+-- Подписчики на уведомления Telegram (дни рождения)
+CREATE TABLE telegram_subscribers (
+    chat_id BIGINT PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Справочник языков
 CREATE TABLE languages (
     id SERIAL PRIMARY KEY,
