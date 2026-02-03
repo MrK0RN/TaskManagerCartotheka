@@ -33,7 +33,7 @@ $levels = [
 ];
 ?>
 
-<div class="languages-component" data-param-name="<?php echo htmlspecialchars($paramName); ?>">
+<div class="languages-component" data-param-name="<?php echo htmlspecialchars($paramName); ?>" data-languages="<?php echo htmlspecialchars(json_encode($languagesList), ENT_QUOTES, 'UTF-8'); ?>">
     <div class="languages-list" id="languages-list-<?php echo htmlspecialchars($paramName); ?>">
         <?php if (empty($savedLanguages)): ?>
             <div class="language-item" data-index="0">

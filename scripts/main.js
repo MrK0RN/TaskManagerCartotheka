@@ -1,12 +1,18 @@
 // Основная логика приложения
 
+// Достаточно большое значение, чтобы контент секции никогда не обрезался и не пересекался с соседними
+var SECTION_MAX_HEIGHT_OPEN = 8000;
+
 // Сворачивание/разворачивание секций
 function toggleSection(header) {
     const content = header.nextElementSibling;
     const icon = header.querySelector('.toggle-icon');
     
-    if (content.style.maxHeight) {
-        content.style.maxHeight = null;
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        const currentHeight = content.scrollHeight;
+        content.style.maxHeight = currentHeight + 'px';
+        content.offsetHeight; // reflow для корректной анимации
+        content.style.maxHeight = '0px';
         content.style.opacity = '0';
         setTimeout(() => {
             content.style.display = 'none';
@@ -14,11 +20,13 @@ function toggleSection(header) {
         }, 500);
     } else {
         content.style.display = 'block';
-        setTimeout(() => {
-            content.style.maxHeight = content.scrollHeight + 'px';
+        content.style.maxHeight = '0px';
+        content.style.opacity = '0';
+        requestAnimationFrame(() => {
+            content.style.maxHeight = SECTION_MAX_HEIGHT_OPEN + 'px';
             content.style.opacity = '1';
             icon.textContent = '▲';
-        }, 10);
+        });
     }
 }
 
@@ -27,7 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const sections = document.querySelectorAll('.section-content');
     sections.forEach(section => {
         section.style.display = 'block';
-        section.style.maxHeight = section.scrollHeight + 'px';
+        // Используем запас по высоте, чтобы контент (в т.ч. параметры 11 и 12) не обрезался и не пересекался
+        section.style.maxHeight = SECTION_MAX_HEIGHT_OPEN + 'px';
         section.style.opacity = '1';
     });
     
@@ -52,6 +61,21 @@ function addLanguage(paramName) {
     const items = list.querySelectorAll('.language-item');
     const nextIndex = items.length;
     
+    // Список языков из data-атрибута (из PHP)
+    let languagesList = [];
+    try {
+        const dataLanguages = container.getAttribute('data-languages');
+        if (dataLanguages) {
+            languagesList = JSON.parse(dataLanguages);
+        }
+    } catch (e) {
+        console.warn('Не удалось загрузить список языков', e);
+    }
+    
+    const optionsHtml = languagesList.map(lang =>
+        `<option value="${lang.id}">${escapeHtml(lang.name)}</option>`
+    ).join('');
+    
     const newItem = document.createElement('div');
     newItem.className = 'language-item';
     newItem.setAttribute('data-index', nextIndex);
@@ -62,6 +86,7 @@ function addLanguage(paramName) {
                 <label>Язык:</label>
                 <select name="${paramName}[${nextIndex}][language_id]" class="language-select" data-autocomplete>
                     <option value="">-- Выберите язык --</option>
+                    ${optionsHtml}
                 </select>
                 <input type="text" class="language-search" placeholder="Поиск языка..." autocomplete="off">
                 <div class="autocomplete-dropdown"></div>
@@ -96,6 +121,12 @@ function addLanguage(paramName) {
     
     // Инициализируем автодополнение для нового элемента
     initLanguageAutocomplete(newItem);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 function removeLanguage(button) {

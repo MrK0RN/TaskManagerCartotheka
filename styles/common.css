@@ -142,6 +142,7 @@ h1 {
 .section-content {
     display: block;
     transition: max-height 0.5s ease, opacity 0.3s ease;
+    overflow: hidden;
 }
 
 .form-group {
