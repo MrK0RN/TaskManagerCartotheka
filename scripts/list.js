@@ -65,11 +65,15 @@
             var fio = escapeHtml(item.fio || 'Без названия');
             return (
                 '<tr>' +
-                '<td class="list-cell-fio">' + fio + '</td>' +
-                '<td>' + escapeHtml(created) + '</td>' +
-                '<td>' + escapeHtml(updated) + '</td>' +
-                '<td>' + escapeHtml(statusText) + '</td>' +
-                '<td class="list-cell-action"><a href="index.php?id=' + item.id + '" class="btn btn-small">Редактировать</a></td>' +
+                '<td class="list-cell-fio" data-label="ФИО">' + fio + '</td>' +
+                '<td data-label="Создан">' + escapeHtml(created) + '</td>' +
+                '<td data-label="Обновлён">' + escapeHtml(updated) + '</td>' +
+                '<td data-label="Статус">' + escapeHtml(statusText) + '</td>' +
+                '<td class="list-cell-action" data-label="">' +
+                '<div class="list-cell-actions">' +
+                '<a href="view.php?id=' + item.id + '" class="btn btn-small btn-outline">Просмотр</a>' +
+                '<a href="index.php?id=' + item.id + '" class="btn btn-small">Редактировать</a>' +
+                '</div></td>' +
                 '</tr>'
             );
         }).join('');

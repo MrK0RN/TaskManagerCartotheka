@@ -1,43 +1,51 @@
 // Основная логика приложения
 
-// Достаточно большое значение, чтобы контент секции никогда не обрезался и не пересекался с соседними
-var SECTION_MAX_HEIGHT_OPEN = 8000;
-
 // Сворачивание/разворачивание секций
 function toggleSection(header) {
     const content = header.nextElementSibling;
     const icon = header.querySelector('.toggle-icon');
     
-    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+    if (content.classList.contains('section-content-open')) {
+        // Сворачивание: анимация от текущей высоты до 0
         const currentHeight = content.scrollHeight;
         content.style.maxHeight = currentHeight + 'px';
         content.offsetHeight; // reflow для корректной анимации
         content.style.maxHeight = '0px';
         content.style.opacity = '0';
+        content.classList.remove('section-content-open');
         setTimeout(() => {
             content.style.display = 'none';
+            content.style.maxHeight = '';
             icon.textContent = '▼';
         }, 500);
     } else {
+        // Разворачивание: анимация от 0 до полной высоты, затем max-height: none для роста при добавлении блоков
         content.style.display = 'block';
         content.style.maxHeight = '0px';
         content.style.opacity = '0';
+        content.offsetHeight;
         requestAnimationFrame(() => {
-            content.style.maxHeight = SECTION_MAX_HEIGHT_OPEN + 'px';
+            const targetHeight = content.scrollHeight;
+            content.style.maxHeight = targetHeight + 'px';
             content.style.opacity = '1';
             icon.textContent = '▲';
+            content.classList.add('section-content-open');
+            content.addEventListener('transitionend', function onOpenEnd() {
+                content.removeEventListener('transitionend', onOpenEnd);
+                content.style.maxHeight = ''; // none — секция растёт при добавлении языков/блоков
+            }, { once: true });
         });
     }
 }
 
-// Инициализация: все секции открыты
+// Инициализация: все секции открыты, без ограничения высоты — контент не пересекается при добавлении блоков
 document.addEventListener('DOMContentLoaded', function() {
     const sections = document.querySelectorAll('.section-content');
     sections.forEach(section => {
         section.style.display = 'block';
-        // Используем запас по высоте, чтобы контент (в т.ч. параметры 11 и 12) не обрезался и не пересекался
-        section.style.maxHeight = SECTION_MAX_HEIGHT_OPEN + 'px';
+        section.style.maxHeight = ''; // естественная высота, без лимита
         section.style.opacity = '1';
+        section.classList.add('section-content-open');
     });
     
     const icons = document.querySelectorAll('.toggle-icon');
@@ -61,15 +69,28 @@ function addLanguage(paramName) {
     const items = list.querySelectorAll('.language-item');
     const nextIndex = items.length;
     
-    // Список языков из data-атрибута (из PHP)
+    // Список языков: из <script type="application/json"> или data-атрибута
     let languagesList = [];
-    try {
+    const scriptSelector = container.getAttribute('data-languages-src');
+    if (scriptSelector) {
+        const scriptEl = document.querySelector(scriptSelector);
+        if (scriptEl && scriptEl.textContent) {
+            try {
+                const parsed = JSON.parse(scriptEl.textContent.trim());
+                if (Array.isArray(parsed)) languagesList = parsed;
+            } catch (e) {
+                console.warn('Не удалось разобрать список языков из script', e);
+            }
+        }
+    }
+    if (languagesList.length === 0) {
         const dataLanguages = container.getAttribute('data-languages');
         if (dataLanguages) {
-            languagesList = JSON.parse(dataLanguages);
+            try {
+                const parsed = JSON.parse(dataLanguages);
+                if (Array.isArray(parsed)) languagesList = parsed;
+            } catch (e) {}
         }
-    } catch (e) {
-        console.warn('Не удалось загрузить список языков', e);
     }
     
     const optionsHtml = languagesList.map(lang =>

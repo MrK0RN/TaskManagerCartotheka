@@ -517,12 +517,50 @@
 
 .list-cell-action {
     white-space: nowrap;
+    text-align: right;
 }
 
-.btn-small {
-    display: inline-block;
-    padding: 6px 14px;
+.list-cell-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.list-cell-actions .btn-small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 8px 16px;
     font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.list-cell-actions .btn-small.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    box-shadow: none;
+}
+
+.list-cell-actions .btn-small.btn-outline:hover {
+    background: rgba(67, 97, 238, 0.08);
+}
+
+.list-cell-actions .btn-small:not(.btn-outline) {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
+}
+
+.list-cell-actions .btn-small:not(.btn-outline):hover {
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.4);
 }
 
 .list-loading,
@@ -539,4 +577,176 @@
 
 .list-empty a {
     color: var(--primary);
+}
+
+/* Адаптация списка: на узких экранах строки как карточки */
+@media (max-width: 768px) {
+    .list-table thead {
+        display: none;
+    }
+    .list-table tbody tr {
+        display: block;
+        border: 1px solid #eee;
+        border-radius: var(--border-radius);
+        margin-bottom: 12px;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+    .list-table tbody tr:hover {
+        background: #fff;
+    }
+    .list-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px;
+        border-bottom: 1px solid #f0f0f0;
+        text-align: right;
+    }
+    .list-table td:last-child {
+        border-bottom: none;
+    }
+    .list-table td[data-label=""] {
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .list-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--gray);
+        text-align: left;
+        margin-right: 12px;
+    }
+    .list-table td[data-label=""]::before {
+        content: none;
+    }
+    .list-cell-fio {
+        font-size: 1.05rem;
+    }
+}
+
+/* Карточка просмотра человека (только чтение) */
+.person-card-page {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.person-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.person-card-header {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.person-card-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--dark);
+}
+
+.person-card-status {
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 500;
+}
+
+.person-card-status--completed {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.person-card-status--draft {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.person-card-body {
+    padding: 20px 24px;
+}
+
+.person-card-fields {
+    margin: 0;
+    display: grid;
+    gap: 0;
+}
+
+.person-card-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.person-card-row:last-of-type {
+    border-bottom: none;
+}
+
+.person-card-row dt {
+    font-weight: 500;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.person-card-row dd {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.person-card-extra {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.person-card-extra-title {
+    margin: 0 0 10px;
+    font-size: 1rem;
+    color: var(--gray);
+}
+
+.person-card-extra-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--dark);
+}
+
+.person-card-footer {
+    padding: 20px 24px;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline:hover {
+    background: rgba(67, 97, 238, 0.08);
+}
+
+@media (max-width: 480px) {
+    .person-card-header,
+    .person-card-body,
+    .person-card-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    .person-card-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
 }
