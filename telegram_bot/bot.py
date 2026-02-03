@@ -5,10 +5,12 @@ Telegram-бот для подписки на уведомления о днях 
 По расписанию: 8:00 и 20:00 (Москва) — рассылка подписчикам.
 """
 import logging
+import time as time_module
 from datetime import time
 
 import pytz
 from telegram import Update
+from telegram.error import Conflict
 from telegram.ext import Application, CommandHandler, ContextTypes
 
 from config import TELEGRAM_BOT_TOKEN, SITE_URL
@@ -108,7 +110,20 @@ def main() -> None:
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("morning", morning))
     app.add_handler(CommandHandler("evening", evening))
-    app.run_polling(allowed_updates=Update.ALL_TYPES)
+
+    # Пауза, чтобы предыдущее соединение getUpdates успело закрыться у Telegram
+    time_module.sleep(10)
+
+    while True:
+        try:
+            app.run_polling(allowed_updates=Update.ALL_TYPES)
+            break
+        except Conflict:
+            logger.warning(
+                "409 Conflict: с этим токеном уже работает другой экземпляр. "
+                "Ждём 60 с и пробуем снова..."
+            )
+            time_module.sleep(60)
 
 
 async def _setup_jobs(application: Application) -> None:

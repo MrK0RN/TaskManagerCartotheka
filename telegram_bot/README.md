@@ -31,6 +31,8 @@ docker compose up -d
 docker compose logs -f telegram-bot
 ```
 
+**Ошибка 409 Conflict** («make sure that only one bot instance is running»): с этим токеном уже идёт другой long polling (второй контейнер, локальный `python bot.py`, другой сервер). Бот теперь при 409 ждёт 60 с и пробует снова. Убедитесь, что нигде больше не запущен этот же бот; при необходимости выдайте новый токен в @BotFather и укажите его в `.env`.
+
 ## Установка (без Docker)
 
 ```bash
