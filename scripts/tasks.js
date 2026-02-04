@@ -203,7 +203,31 @@
                 .then(function (data) {
                     if (data.success) {
                         closeInlineSubtask();
-                        loadTasks();
+                        // Оптимистично добавляем подзадачу в дерево из ответа и перерисовываем
+                        if (data.task && data.task.id && parentId) {
+                            var parentTask = findTaskById(currentTree, parentId);
+                            if (parentTask) {
+                                var newTask = {
+                                    id: data.task.id,
+                                    parent_id: data.task.parent_id,
+                                    title: data.task.title || title,
+                                    due_date: data.task.due_date || null,
+                                    portrait_id: data.task.portrait_id || null,
+                                    assignee_fio: data.task.assignee_fio || null,
+                                    children: []
+                                };
+                                if (!parentTask.children) parentTask.children = [];
+                                parentTask.children.push(newTask);
+                                currentFlat = flattenWithDepth(currentTree, 0, null, []);
+                                var html = renderFlatList(currentFlat);
+                                setTree(html);
+                                loadTasks(true);
+                            } else {
+                                loadTasks();
+                            }
+                        } else {
+                            loadTasks();
+                        }
                     } else {
                         addBtn.disabled = false;
                         alert(data.message || 'Ошибка');
@@ -230,17 +254,23 @@
 
     var currentTree = [];
 
-    function loadTasks() {
+    function loadTasks(silent) {
         closeInlineSubtask();
-        if (loadingEl) loadingEl.style.display = 'block';
-        if (emptyEl) emptyEl.style.display = 'none';
-        if (treeEl) treeEl.style.display = 'none';
+        if (!silent) {
+            if (loadingEl) loadingEl.style.display = 'block';
+            if (emptyEl) emptyEl.style.display = 'none';
+            if (treeEl) treeEl.style.display = 'none';
+        }
 
         fetch(API + (API.indexOf('?') >= 0 ? '&' : '?') + '_=' + Date.now())
             .then(function (res) { return res.json(); })
             .then(function (data) {
                 if (data.success) {
                     currentTree = data.tasks || [];
+                    var flatCount = currentTree.length ? flattenWithDepth(currentTree, 0, null, []).length : 0;
+                    if (typeof console !== 'undefined' && console.log) {
+                        console.log('Tasks loaded: roots=' + currentTree.length + ', flat items=' + flatCount);
+                    }
                     if (currentTree.length === 0) {
                         setTree('');
                         return;

@@ -1,6 +1,8 @@
 <?php
 // API задач: дерево (GET), создание (POST), обновление (PUT), удаление (DELETE)
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 require_once __DIR__ . '/../config/database.php';
 
 $response = ['success' => false, 'message' => '', 'tasks' => [], 'task' => null];
@@ -67,26 +69,47 @@ try {
         $response['tasks'] = buildTree($flat);
         $response['success'] = true;
         $response['message'] = 'OK';
+        $rootCount = count($response['tasks']);
+        $flatCount = count($flat);
+        if (!empty($_GET['debug'])) {
+            $response['_debug'] = ['flat_count' => $flatCount, 'root_count' => $rootCount];
+        }
+        error_log(sprintf('Tasks GET: flat=%d, roots=%d, filters: due_date=%s, portrait_id=%s', $flatCount, $rootCount, $dueDate ?: '(none)', $portraitId ?: '(none)'));
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
         exit;
     }
 
     if ($method === 'POST') {
-        $input = json_decode(file_get_contents('php://input'), true);
-        if (!$input) {
+        $rawInput = file_get_contents('php://input');
+        $input = $rawInput !== '' ? json_decode($rawInput, true) : null;
+        if (!is_array($input)) {
             $input = $_POST;
+        }
+        if (!is_array($input)) {
+            $input = [];
+        }
+        if ($rawInput !== '' && empty($input)) {
+            error_log('Tasks POST: body not parsed as JSON or form, raw length=' . strlen($rawInput) . ' start=' . substr($rawInput, 0, 100));
         }
         $parentId = isset($input['parent_id']) ? (int)$input['parent_id'] : null;
         if ($parentId === 0) {
             $parentId = null;
         }
-        $title = isset($input['title']) ? trim($input['title']) : '';
+        $title = isset($input['title']) ? trim((string)$input['title']) : '';
         $dueDate = isset($input['due_date']) ? trim($input['due_date']) : null;
         $portraitId = isset($input['portrait_id']) ? (int)$input['portrait_id'] : null;
         if ($portraitId === 0) {
             $portraitId = null;
         }
-        $sortOrder = isset($input['sort_order']) ? (int)$input['sort_order'] : 0;
+        $sortOrder = isset($input['sort_order']) ? (int)$input['sort_order'] : null;
+        if ($sortOrder === null && $parentId !== null) {
+            $stmt = $db->prepare("SELECT COALESCE(MAX(sort_order), -1) + 1 AS next_order FROM tasks WHERE parent_id = :parent_id");
+            $stmt->execute([':parent_id' => $parentId]);
+            $sortOrder = (int) $stmt->fetch(PDO::FETCH_ASSOC)['next_order'];
+        }
+        if ($sortOrder === null) {
+            $sortOrder = 0;
+        }
 
         if ($title === '') {
             $response['message'] = 'Укажите название задачи';
@@ -137,6 +160,7 @@ try {
         }
         $response['success'] = true;
         $response['message'] = 'Задача создана';
+        error_log(sprintf('Tasks POST: created id=%d parent_id=%s title=%s', $taskId, $row['parent_id'] === null ? 'null' : $row['parent_id'], $title));
         $response['task'] = [
             'id' => $taskId,
             'parent_id' => $row['parent_id'] !== null ? (int) $row['parent_id'] : null,
@@ -277,19 +301,27 @@ try {
 function buildTree(array $flat) {
     $byId = [];
     foreach ($flat as $item) {
-        $byId[$item['id']] = $item;
+        $byId[(int)$item['id']] = $item;
     }
+    $childrenOf = [];
+    foreach ($flat as $item) {
+        $pid = $item['parent_id'];
+        if ($pid !== null && isset($byId[(int)$pid])) {
+            $childrenOf[(int)$pid][] = $item;
+        }
+    }
+    $buildNode = function ($item) use (&$buildNode, $childrenOf) {
+        $id = (int)$item['id'];
+        $childItems = isset($childrenOf[$id]) ? $childrenOf[$id] : [];
+        $children = array_map($buildNode, $childItems);
+        return array_merge($item, ['children' => $children]);
+    };
     $tree = [];
     foreach ($flat as $item) {
-        if ($item['parent_id'] === null) {
-            $tree[] = $item;
-        } else {
-            if (isset($byId[$item['parent_id']])) {
-                $byId[$item['parent_id']]['children'][] = $item;
-            } else {
-                $tree[] = $item;
-            }
+        if ($item['parent_id'] !== null) {
+            continue;
         }
+        $tree[] = $buildNode($item);
     }
     return $tree;
 }
