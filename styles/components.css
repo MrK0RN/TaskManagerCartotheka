@@ -72,6 +72,55 @@
     margin-top: 8px;
 }
 
+/* Обёртка textarea с кнопкой голосового ввода */
+.textarea-voice-wrapper {
+    position: relative;
+    display: block;
+}
+
+.textarea-voice-wrapper textarea {
+    padding-right: 44px;
+}
+
+.btn-voice {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius, 6px);
+    background: var(--gray-200, #e8e8e8);
+    color: var(--black, #1f1f1f);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-voice:hover:not(:disabled) {
+    background: var(--red-hex, #d37064);
+    color: var(--white, #fff);
+}
+
+.btn-voice:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-voice.btn-voice-recording {
+    background: var(--red-hex, #d37064);
+    color: var(--white, #fff);
+    animation: voice-pulse 1s ease-in-out infinite;
+}
+
+@keyframes voice-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
 .btn-remove-language,
 .btn-remove-education,
 .btn-remove-skill {

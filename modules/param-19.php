@@ -23,7 +23,6 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Пример:</strong> «Сильная профессиональная идентичность (инженер) — гордится профессией. Слабая национальная идентичность — не чувствует связи с культурой предков».
     </div>
-    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="options-grid">

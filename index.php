@@ -116,5 +116,6 @@ $sections = [
     <script src="scripts/autocomplete.js"></script>
     <script src="scripts/form-handler.js"></script>
     <script src="scripts/main.js"></script>
+    <script src="scripts/voice-input.js"></script>
 </body>
 </html>

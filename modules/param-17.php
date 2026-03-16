@@ -21,7 +21,6 @@ $roDis = $readOnly ? ' disabled' : '';
         </ul>
         <strong>Важно:</strong> насколько эти убеждения осознаны? Менялись ли они со временем?
     </div>
-    <?php endif; ?>
     
     <div class="structured-fields">
         <div class="field-row">
