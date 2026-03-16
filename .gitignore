@@ -1,5 +1,7 @@
 .env
+config/local.php
 telegram_bot/.env
+telegram_bot_php/config.local.php
 *.pyc
 __pycache__/
 .venv/

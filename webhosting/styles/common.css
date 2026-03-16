@@ -1,0 +1,463 @@
+:root {
+    --black: #1f1f1f;
+    --white: #ffffff;
+    --red: rgb(211, 112, 100);
+    --red-hex: #d37064;
+    --dark-red: rgb(69, 39, 38);
+    --dark-red-hex: #452726;
+    --gray-100: #f5f5f5;
+    --gray-200: #e8e8e8;
+    --gray-250: #d8d8d8;
+    --gray-400: #9a9a9a;
+    --gray-600: #6b6b6b;
+    --gray-800: #3d3d3d;
+    --radius: 6px;
+    --shadow-subtle: 0 1px 3px rgba(31, 31, 31, 0.06);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    color: var(--black);
+    background: var(--gray-100);
+    min-height: 100vh;
+    padding: 24px;
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 32px;
+    color: var(--black);
+}
+
+h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: var(--gray-600);
+    font-weight: 400;
+}
+
+.header-nav {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.header-nav a {
+    color: var(--gray-600);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.header-nav a:hover {
+    color: var(--red-hex);
+}
+
+.form-back-link {
+    margin-bottom: 20px;
+}
+
+.form-back-link a {
+    color: var(--gray-600);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.form-back-link a:hover {
+    color: var(--red-hex);
+}
+
+.form-container {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-subtle);
+    padding: 32px;
+}
+
+.section {
+    margin-bottom: 32px;
+    padding-bottom: 28px;
+}
+
+.section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 14px 0;
+    color: var(--black);
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--gray-200);
+    transition: color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.section-header:hover {
+    color: var(--dark-red-hex);
+}
+
+.section-header h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    line-height: 1.4;
+}
+
+.toggle-icon {
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.section-content {
+    display: block;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+    overflow: hidden;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--black);
+    font-size: 0.9rem;
+}
+
+.param-name {
+    color: var(--dark-red-hex);
+    font-weight: 600;
+}
+
+.help-text {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    background: var(--gray-100);
+    border-radius: var(--radius);
+    line-height: 1.6;
+}
+
+.help-text strong {
+    color: var(--black);
+}
+
+.help-text ul {
+    margin-left: 18px;
+    margin-top: 6px;
+}
+
+.help-text li {
+    margin-bottom: 4px;
+}
+
+select,
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    background: var(--white);
+    transition: border-color 0.2s ease;
+}
+
+select,
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+    min-height: 42px;
+}
+
+select:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--red-hex);
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+textarea.large {
+    min-height: 160px;
+}
+
+textarea.xlarge {
+    min-height: 220px;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.option-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.option-item label {
+    font-weight: 400;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    color: var(--gray-800);
+}
+
+footer {
+    text-align: center;
+    margin-top: 28px;
+    color: var(--gray-600);
+    font-size: 0.9rem;
+}
+
+.btn-container {
+    text-align: center;
+    margin-top: 28px;
+}
+
+.btn {
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover {
+    background: var(--dark-red-hex);
+}
+
+.btn:active {
+    opacity: 0.95;
+}
+
+.btn-primary {
+    background: var(--red-hex);
+}
+
+.btn-primary:hover {
+    background: var(--dark-red-hex);
+}
+
+.progress-indicator {
+    margin-bottom: 16px;
+    padding: 12px 0;
+    text-align: center;
+    color: var(--gray-600);
+    font-size: 0.9rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--gray-200);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--red-hex);
+    transition: width 0.2s ease;
+}
+
+@media (max-width: 1024px) {
+    body {
+        padding: 20px;
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+    }
+
+    .form-container {
+        padding: 24px;
+    }
+
+    .section {
+        margin-bottom: 28px;
+        padding-bottom: 24px;
+    }
+
+    .section-header {
+        padding: 12px 0;
+    }
+
+    .section-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .options-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 16px;
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+    }
+
+    .form-container {
+        padding: 20px 16px;
+    }
+
+    header {
+        margin-bottom: 24px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 4px;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+    }
+
+    .section-header {
+        padding: 10px 0;
+        margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+        font-size: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .section {
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .help-text {
+        font-size: 0.8rem;
+        padding: 10px 12px;
+    }
+
+    .options-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    textarea {
+        min-height: 90px;
+    }
+
+    textarea.large {
+        min-height: 130px;
+    }
+
+    textarea.xlarge {
+        min-height: 170px;
+    }
+
+    .btn-container {
+        margin-top: 24px;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 280px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+
+    footer {
+        margin-top: 20px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+    }
+
+    .form-container {
+        padding: 16px 14px;
+    }
+
+    h1 {
+        font-size: 1.35rem;
+    }
+
+    .subtitle {
+        font-size: 0.85rem;
+    }
+
+    .section-header h2 {
+        font-size: 0.95rem;
+    }
+
+    .btn {
+        max-width: none;
+    }
+}

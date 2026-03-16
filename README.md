@@ -35,6 +35,10 @@
 
 Приложение: порт 8081. PostgreSQL: порт 5433 (пользователь `portrait_user`, БД `portrait_db`).
 
+## Развёртывание на webhosting (без Docker)
+
+В папке [webhosting/](webhosting/) — версия сайта для хостинга с PostgreSQL. Инструкция по установке: [webhosting/README.md](webhosting/README.md). После изменений в коде обновите копию: `./scripts/prepare-webhosting.sh`, затем проверьте идентичность: `./scripts/verify-webhosting-identity.sh`.
+
 ## Документация
 
 | Документ | Описание |
